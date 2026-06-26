@@ -554,6 +554,7 @@ fetchImageData();
 function fetchImageData(){
   const raw = {
   'header': 'images/header.jpg',
+  'home_bg': 'images/home_bg.jpg',
   'bg_qi_shang': 'images/bg_qi_shang.jpg',
   'bg_qi_xia': 'images/bg_qi_xia.jpg',
   'scene_3': 'images/scene_3.jpg',
@@ -584,7 +585,7 @@ function enterSite(){
 }
 function initHomePage(){
   const homeImg=document.getElementById('homeBgImg');
-  if(IMG_DATA['header']){homeImg.src=IMG_DATA['header']}
+  if(IMG_DATA['home_bg']){homeImg.src=IMG_DATA['home_bg']}
   if(window.location.hash==='#main'){enterSite()}
 }
 
