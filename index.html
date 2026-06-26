@@ -241,9 +241,32 @@ body{
   .toolbar button{padding:5px 9px;font-size:10px}
   .content{padding:12px 10px}
 }
+
+/* ====== 首页 ====== */
+.home-page{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;transition:opacity .6s ease,visibility .6s ease}
+.home-page.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.home-bg{position:absolute;inset:0}
+.home-bg img{width:100%;height:100%;object-fit:cover;object-position:center 20%}
+.home-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.25) 0%,rgba(0,0,0,0.10) 40%,rgba(0,0,0,0.45) 100%)}
+.home-content{position:relative;z-index:1;text-align:center;color:#fff;padding:0 24px}
+.home-content h1{font-family:'Ma Shan Zheng','ZCOOL XiaoWei','Noto Serif SC',serif;font-size:64px;letter-spacing:10px;font-weight:900;text-shadow:0 2px 20px rgba(0,0,0,0.5);margin-bottom:12px}
+.home-content .sub{font-size:16px;letter-spacing:4px;opacity:0.85;margin-bottom:40px}
+.home-content .enter-btn{display:inline-block;padding:14px 52px;font-size:18px;letter-spacing:6px;font-weight:700;color:#fff;background:rgba(201,162,39,0.55);border:2px solid rgba(255,255,255,0.7);border-radius:12px;cursor:pointer;transition:.35s;font-family:inherit;text-shadow:0 1px 4px rgba(0,0,0,0.3);backdrop-filter:blur(4px)}
+.home-content .enter-btn:hover{background:rgba(201,162,39,0.85);border-color:#fff;transform:translateY(-2px);box-shadow:0 6px 24px rgba(201,162,39,0.4)}
+@media(max-width:768px){.home-content h1{font-size:38px;letter-spacing:5px}.home-content .enter-btn{padding:12px 36px;font-size:15px}}
 </style>
 </head>
 <body>
+<!-- 首页 -->
+<div class="home-page" id="homePage">
+  <div class="home-bg"><img id="homeBgImg" src="" alt=""></div>
+  <div class="home-content">
+    <h1>初中数学 · 苏科版</h1>
+    <div class="sub">— crafted by kax —</div>
+    <button class="enter-btn" onclick="enterSite()">开始备课</button>
+  </div>
+</div>
+
 
 <!-- 背景图层 -->
 <div class="bg-layer" id="bgLayer"></div>
@@ -259,7 +282,7 @@ body{
 <div class="overlay-mask" id="overlayMask" onclick="closeSidebar()"></div>
 <button class="menu-btn" onclick="openSidebar()"><span></span></button>
 
-<div class="app">
+<div class="app" id="appContainer" style="display:none">
   <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
     <button class="sidebar-close-btn" onclick="closeSidebar()">✕</button>
@@ -286,9 +309,6 @@ body{
       <span class="mode-tag view" id="modeBadge">只读</span>
       <button onclick="toggleEditMode()" id="btnEditToggle">开启编辑</button>
       <button onclick="saveData()" id="btnSave" style="display:none">保存</button>
-      <button onclick="exportAll()">导出</button>
-      <button onclick="importData()">导入</button>
-      <button onclick="generatePublishHTML()" class="btn-gold">生成发布版</button>
     </div>
     <div class="content" id="mainContent">
       <div class="empty-state">
@@ -529,77 +549,17 @@ function insLT(id,code){const ta=document.querySelector('#mainContent textarea')
 function uploadImg(id,input){const f=input.files[0];if(!f)return;if(f.size>2*1024*1024){showToast('图片不超过2MB');return}const r=new FileReader();r.onload=function(e){if(!chapterData[id])chapterData[id]={};if(!chapterData[id].images)chapterData[id].images=[];chapterData[id].images.push(e.target.result);autoSave();renderContent(currentChapter);showToast('已上传')};r.readAsDataURL(f);input.value=''}
 function openLb(src){document.getElementById('lightboxImg').src=src;document.getElementById('lightbox').classList.add('show')}
 
-function exportAll(){
-  let lines=['# 初中数学备课笔记','','> '+new Date().toLocaleString(),'','---',''];
-  for(const[g,data]of Object.entries(textbook)){
-    lines.push('## '+g);lines.push('');
-    data.chapters.forEach(ch=>{
-      const d=chapterData[ch.id];if(!d)return;
-      const t=[d.knowledge,d.competency,d.mistakes,d.kax,d.lessonPlan,d.homework].filter(Boolean).join('');
-      if(t.length<5)return;
-      lines.push('### 第'+ch.num+'章 · '+ch.name);
-      if(d.knowledge){lines.push('');lines.push('**知识要点**');lines.push('');lines.push(d.knowledge)}
-      if(d.competency){lines.push('');lines.push('**核心素养**');lines.push('');lines.push(d.competency)}
-      if(d.mistakes){lines.push('');lines.push('**易错清单**');lines.push('');lines.push(d.mistakes)}
-      if(d.kax){lines.push('');lines.push('**KAX真题**');lines.push('');lines.push(d.kax)}
-      if(d.lessonPlan){lines.push('');lines.push('**备课笔记**');lines.push('');lines.push(d.lessonPlan)}
-      if(d.homework){lines.push('');lines.push('**课后作业**');lines.push('');lines.push(d.homework)}
-      lines.push('');lines.push('---');lines.push('')
-    })
-  }
-  dl(lines.join('\n'),'备课笔记_'+new Date().toISOString().slice(0,10)+'.md','text/markdown');
-  dl(JSON.stringify(chapterData,null,2),'备课数据_'+new Date().toISOString().slice(0,10)+'.json','application/json');
-  showToast('导出完成')
-}
-function importData(){
-  const inp=document.createElement('input');inp.type='file';inp.accept='.json';
-  inp.onchange=async e=>{
-    const f=e.target.files[0];if(!f)return;
-    try{
-      const j=JSON.parse(await f.text());
-      if(j.data&&j.comments){if(confirm('导入'+Object.keys(j.data).length+'章数据，覆盖现有？')){chapterData=j.data;saveData();renderNav();if(currentChapter)renderContent(currentChapter);showToast('导入完成')}}
-      else{if(confirm('导入'+Object.keys(j).length+'章数据，覆盖现有？')){chapterData=j;saveData();renderNav();if(currentChapter)renderContent(currentChapter);showToast('导入完成')}}
-    }catch{showToast('文件格式错误')}
-  };inp.click()
-}
-function generatePublishHTML(){
-  const dj=JSON.stringify(chapterData);
-  const src=document.documentElement.outerHTML;
-  const pub=src.replace('let chapterData={}','let chapterData='+JSON.stringify(chapterData))
-    .replace(/localStorage\.getItem\('skb7_data'\);[^}]+}/g,'null;');
+
   dl(pub,'发布版_'+new Date().toISOString().slice(0,10)+'.html','text/html');
   dl(dj,'备课数据_'+new Date().toISOString().slice(0,10)+'.json','application/json');
   showToast('发布版已生成')
 }
-function dl(c,fn,m){const b=new Blob([c],{type:m+';charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=fn;a.click()}
-
-// 加载图片数据并初始化
-fetchImageData();
-function fetchImageData(){
-  const raw = {
-  'header': 'images/header.jpg',
-  'bg_qi_shang': 'images/bg_qi_shang.jpg',
-  'bg_qi_xia': 'images/bg_qi_xia.jpg',
-  'scene_3': 'images/scene_3.jpg',
-  'bg_ba_xia': 'images/bg_ba_xia.jpg',
-  'bg_jiu': 'images/bg_jiu.jpg',
-  'char_1': 'images/char_1.jpg',
-  'char_2': 'images/char_2.jpg',
-  'char_3': 'images/char_3.jpg',
-  'scene_1': 'images/scene_1.jpg',
-  'scene_2': 'images/scene_2.jpg',
-  'extra_1': 'images/extra_1.jpg',
-  'extra_2': 'images/extra_2.jpg',
-  'extra_3': 'images/extra_3.jpg',
-  'extra_4': 'images/extra_4.jpg',
-  'extra_5': 'images/extra_5.jpg',
-  'extra_6': 'images/extra_6.jpg',
-  'extra_7': 'images/extra_7.jpg'
-};
+;
 Object.assign(IMG_DATA, raw);
 setHeader();
 }
 
+initHomePage();
 loadData();
 renderNav();
 
