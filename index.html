@@ -4,6 +4,338 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>初中数学 · 苏科版</title>
+<script>MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},svg:{fontCache:'global'}};</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700;900&family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&display=swap');
+:root{
+  --ivory:#faf6ed;--ivory-dark:#f0e8d8;--card-bg:rgba(255,252,245,0.92);--card-bg2:rgba(253,249,240,0.94);
+  --gold:#c9a227;--gold-light:#dfc47a;--gold-dark:#8b6914;--gold-glow:rgba(201,162,39,0.15);
+  --gold-border:rgba(180,150,80,0.25);--text-pri:#4a3c2d;--text-sec:#7a6b58;--text-dim:#a09585;--text-head:#3d3020;
+  --shadow-sm:0 2px 8px rgba(120,90,40,0.06);--shadow-md:0 4px 20px rgba(120,90,40,0.10);
+  --radius:12px;--side-w:280px;
+  --c1:#4a8fc2;--c1-bg:rgba(74,143,194,0.06);--c1-glow:rgba(74,143,194,0.08);
+  --c2:#c9a227;--c2-bg:rgba(201,162,39,0.06);--c2-glow:rgba(201,162,39,0.08);
+  --c3:#9b6fc9;--c3-bg:rgba(155,111,201,0.06);--c3-glow:rgba(155,111,201,0.08);
+  --c4:#5cb85c;--c4-bg:rgba(92,184,92,0.05);--c4-glow:rgba(92,184,92,0.07);
+  --c5:#5ba8c0;--c5-bg:rgba(91,168,192,0.06);--c5-glow:rgba(91,168,192,0.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:"Noto Serif SC","Microsoft YaHei","微软雅黑",serif;
+  color:var(--text-pri);min-height:100vh;overflow-x:hidden;
+  background:var(--ivory);position:relative;
+}
+
+/* ====== 背景图层 ====== */
+.bg-layer{
+  position:fixed;inset:0;z-index:-1;
+  background-size:cover;background-position:center;background-repeat:no-repeat;
+  opacity:0.12;filter:blur(2px);
+  transition:background-image 1.5s ease;
+}
+.bg-layer::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 35%,rgba(250,246,237,0.4) 0%,rgba(250,246,237,0.78) 70%,rgba(250,246,237,0.95) 100%);
+}
+
+/* ====== 汉堡菜单 ====== */
+.menu-btn{display:none;position:fixed;top:12px;left:12px;z-index:101;width:44px;height:44px;border:1px solid var(--gold-border);border-radius:10px;background:var(--card-bg);cursor:pointer;align-items:center;justify-content:center;box-shadow:var(--shadow-sm)}
+.menu-btn span{display:block;width:20px;height:2px;background:var(--gold-dark);position:relative;transition:.3s}
+.menu-btn span::before,.menu-btn span::after{content:'';display:block;width:20px;height:2px;background:var(--gold-dark);position:absolute;transition:.3s}
+.menu-btn span::before{top:-6px}.menu-btn span::after{top:6px}
+.overlay-mask{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:99;backdrop-filter:blur(3px)}
+.overlay-mask.show{display:block}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--ivory-dark)}::-webkit-scrollbar-thumb{background:linear-gradient(var(--gold-light),var(--gold));border-radius:3px}
+
+.app{display:flex;min-height:100vh}
+
+/* ====== 页眉横幅 - v11 完整图片展示 ====== */
+.header-banner{
+  position:relative;width:100%;overflow:hidden;
+  flex-shrink:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:0 28px 20px;
+  border-bottom:none;
+  min-height:380px;
+}
+.header-banner .header-full-img{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  object-fit:cover;object-position:center top;
+}
+/* 渐变遮罩确保文字可读 */
+.header-banner::before{
+  content:'';position:absolute;top:0;left:0;right:0;bottom:0;z-index:1;
+  background:linear-gradient(180deg,
+    rgba(250,246,237,0.08) 0%,
+    rgba(250,246,237,0.30) 45%,
+    rgba(250,246,237,0.70) 72%,
+    rgba(250,246,237,0.93) 88%,
+    rgba(250,246,237,0.98) 100%
+  );
+}
+.header-banner .header-inner{position:relative;z-index:2;text-align:center;width:100%;padding-top:260px}
+.header-banner h1{font-family:'Ma Shan Zheng','ZCOOL XiaoWei','Noto Serif SC',serif;font-size:52px;color:var(--gold-dark);letter-spacing:8px;font-weight:900;text-shadow:0 0 20px rgba(201,162,39,0.3),0 2px 4px rgba(0,0,0,0.15),0 1px 0 rgba(255,255,255,0.5);line-height:1.3}
+.header-banner .sub{position:relative;z-index:2;font-size:12.5px;color:var(--text-sec);margin-top:6px;letter-spacing:2px}
+.header-banner .author-mark{position:relative;z-index:2;margin-top:8px;font-size:11px;color:var(--text-dim);letter-spacing:1px}
+.header-banner .author-mark em{font-style:normal;color:var(--gold);font-weight:700}
+
+/* ====== SIDEBAR ====== */
+.sidebar{width:var(--side-w);background:linear-gradient(180deg,rgba(255,253,248,0.96),rgba(252,247,235,0.94));border-right:1px solid var(--gold-border);display:flex;flex-direction:column;flex-shrink:0;position:relative;z-index:10;box-shadow:3px 0 24px rgba(100,80,40,.06);backdrop-filter:blur(10px)}
+.sidebar-header{padding:18px 16px 14px;border-bottom:1px solid var(--gold-border);position:relative}
+.sidebar-header::after{content:'';position:absolute;bottom:0;left:16px;right:16px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-light),transparent)}
+.sidebar-header h2{font-family:'ZCOOL XiaoWei','Noto Serif SC',serif;font-size:17px;color:var(--gold-dark);font-weight:700;letter-spacing:2px}
+.sidebar-header .sub{font-size:11px;color:var(--text-dim);margin-top:3px}
+.sidebar-stats{padding:8px 16px;font-size:11px;color:var(--text-sec);border-bottom:1px solid rgba(180,150,80,.12);display:flex;justify-content:space-between}
+.search-box{margin:8px 12px;padding:8px 14px;border:1.5px solid var(--gold-border);border-radius:20px;font-size:13px;font-family:inherit;color:var(--text-pri);background:var(--card-bg);outline:none;transition:.3s}
+.search-box:focus{border-color:var(--gold);box-shadow:0 0 14px var(--gold-glow)}
+.search-box::placeholder{color:var(--text-dim)}
+.nav{flex:1;overflow-y:auto;padding:6px 0}
+
+.grade-title{padding:11px 16px;font-size:12.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;border-left:3px solid transparent;transition:.25s;color:var(--text-sec);letter-spacing:1.5px}
+.grade-title:hover{background:rgba(200,160,60,.04);color:var(--text-head)}
+.grade-title .gd-arrow{margin-left:auto;font-size:9px;transition:.3s;color:var(--gold)}
+.grade-title .gd-arrow.open{transform:rotate(90deg)}
+.grade-chapters.collapsed{display:none}
+
+.chapter-item{padding:8px 16px 8px 32px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;border-left:2px solid transparent;transition:.2s;color:var(--text-sec);position:relative}
+.chapter-item:hover{background:rgba(200,160,60,.04);color:var(--text-head)}
+.chapter-item .ch-num{font-size:10px;color:var(--text-dim);min-width:22px;font-weight:500}
+.chapter-item .badge{font-size:9px;color:#fff;padding:1px 8px;border-radius:10px;margin-left:auto}
+.chapter-item .el-dot{width:7px;height:7px;border-radius:2px;transform:rotate(45deg);flex-shrink:0;margin-right:2px}
+.chapter-item.active{font-weight:600}
+
+.grade-title.g-1{color:var(--c1)}.grade-title.g-2{color:var(--c2)}.grade-title.g-3{color:var(--c3)}.grade-title.g-4{color:var(--c4)}.grade-title.g-5{color:var(--c5)}
+
+.ch-item-1.active{background:linear-gradient(90deg,var(--c1-bg),transparent);color:var(--c1);border-left-color:var(--c1)}
+.ch-item-2.active{background:linear-gradient(90deg,var(--c2-bg),transparent);color:var(--c2);border-left-color:var(--c2)}
+.ch-item-3.active{background:linear-gradient(90deg,var(--c3-bg),transparent);color:var(--c3);border-left-color:var(--c3)}
+.ch-item-4.active{background:linear-gradient(90deg,var(--c4-bg),transparent);color:var(--c4);border-left-color:var(--c4)}
+.ch-item-5.active{background:linear-gradient(90deg,var(--c5-bg),transparent);color:var(--c5);border-left-color:var(--c5)}
+
+.sidebar-close-btn{position:absolute;top:10px;right:10px;width:32px;height:32px;border:1px solid var(--gold-border);border-radius:50%;background:var(--card-bg);cursor:pointer;font-size:14px;color:var(--text-dim);line-height:30px;text-align:center;z-index:5;display:none}
+
+/* ====== MAIN ====== */
+.main{flex:1;display:flex;flex-direction:column;min-width:0;position:relative}
+
+.toolbar{padding:12px 24px;background:linear-gradient(180deg,rgba(255,252,245,0.96),rgba(250,246,237,0.92));border-bottom:1px solid var(--gold-border);display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap;box-shadow:var(--shadow-sm);position:sticky;top:0;z-index:5;backdrop-filter:blur(8px)}
+.toolbar h3{font-family:'ZCOOL XiaoWei','Noto Serif SC',serif;font-size:15.5px;color:var(--text-head);flex:1;min-width:140px;font-weight:600;letter-spacing:1px}
+.toolbar .mode-tag{font-size:10px;padding:4px 12px;border-radius:12px;border:1.5px solid var(--gold-border);font-weight:500}
+.mode-tag.view{color:var(--text-dim)}.mode-tag.edit{color:var(--gold-dark);border-color:var(--gold);background:var(--gold-glow)}
+.toolbar button{padding:6px 14px;border:1.5px solid var(--gold-border);border-radius:8px;cursor:pointer;font-size:11px;font-family:inherit;background:linear-gradient(180deg,#fffef8,#f8f3e6);color:var(--text-sec);transition:.25s;white-space:nowrap;font-weight:500}
+.toolbar button:hover{border-color:var(--gold);color:var(--gold-dark);background:linear-gradient(180deg,#faf5e6,#f2e8cc);box-shadow:0 2px 8px var(--gold-glow);transform:translateY(-1px)}
+.toolbar button:active{transform:translateY(0)}
+.toolbar .btn-gold{background:linear-gradient(135deg,#f5e6c3,#e8d4a0)!important;color:var(--gold-dark)!important;border-color:var(--gold)!important;font-weight:700!important;box-shadow:0 2px 10px rgba(201,162,39,0.25)!important}
+
+/* 内容区 */
+.content{flex:1;overflow-y:auto;padding:28px 36px;display:flex;flex-direction:column;gap:18px;position:relative;z-index:2;max-width:1100px;margin:0 auto;width:100%}
+.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text-dim);gap:16px;text-align:center;padding:60px 20px}
+.empty-state .emblem{width:84px;height:84px;border:2px solid var(--gold-border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:34px;background:rgba(200,160,60,.03);box-shadow:var(--shadow-sm)}
+.empty-state h4{font-family:'ZCOOL XiaoWei','Noto Serif SC',serif;color:var(--text-sec);font-weight:500;letter-spacing:2px;font-size:16px}
+.empty-state p{font-size:13px;line-height:2.2}
+
+/* chapter meta */
+.chapter-meta{display:flex;gap:16px;flex-wrap:wrap;align-items:center;padding:14px 20px;background:linear-gradient(135deg,rgba(255,252,245,0.95),rgba(253,249,240,0.92));border-radius:var(--radius);border:1px solid var(--gold-border);font-size:12.5px;box-shadow:var(--shadow-sm);backdrop-filter:blur(6px);position:relative;z-index:3}
+.chapter-meta::before{content:'';position:absolute;top:0;left:20px;right:20px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-light),transparent)}
+.chapter-meta .meta-item{color:var(--text-sec)}.chapter-meta .meta-item b{color:var(--text-head);font-weight:600}
+
+/* ====== 章节底部大图 ====== */
+.chapter-footer-img{
+  margin:4px 0;padding:0;
+  border-radius:var(--radius);overflow:hidden;
+  border:1.5px solid var(--gold-border);
+  box-shadow:var(--shadow-md);
+}
+.chapter-footer-img img{
+  width:100%;height:auto;display:block;
+  transition:.4s ease;cursor:pointer;
+}
+.chapter-footer-img img:hover{opacity:0.92;transform:scale(1.01)}
+
+/* cards - v11 原神风格卡片 */
+.section-card{background:linear-gradient(145deg,rgba(255,252,247,0.96),rgba(252,247,235,0.94));border-radius:var(--radius);overflow:hidden;border:1.5px solid var(--gold-border);box-shadow:var(--shadow-sm);transition:.3s;backdrop-filter:blur(6px);position:relative;z-index:3}
+.section-card:hover{box-shadow:var(--shadow-md);border-color:rgba(200,160,60,.3);transform:translateY(-1px)}
+.section-card::before{content:'';display:block;height:1.5px;background:linear-gradient(90deg,transparent,var(--gold-light),var(--gold),var(--gold-light),transparent);opacity:.6}
+.card-hd{padding:13px 20px;display:flex;align-items:center;gap:10px;cursor:pointer;background:linear-gradient(135deg,rgba(245,239,222,.35),rgba(240,232,218,.2));transition:.2s}
+.card-hd:hover{background:linear-gradient(135deg,rgba(245,239,222,.55),rgba(240,232,218,.35))}
+.card-hd .hd-icon{font-size:17px;width:26px;text-align:center;flex-shrink:0}
+.card-hd .hd-title{font-size:13.5px;font-weight:650;color:var(--text-head);flex:1;letter-spacing:0.5px}
+.card-hd .hd-tag{font-size:10px;padding:2px 10px;border-radius:10px;border:1px solid;flex-shrink:0;font-weight:500}
+.card-hd .hd-toggle{margin-left:auto;color:var(--text-dim);font-size:10px;transition:.3s}
+.card-hd .hd-toggle.collapsed{transform:rotate(-90deg)}
+.card-bd{padding:18px 20px}.card-bd.collapsed{display:none}
+
+.card-bd textarea{width:100%;border:1.5px solid var(--gold-border);border-radius:8px;padding:13px;font-size:13.5px;font-family:inherit;color:var(--text-pri);background:rgba(250,247,240,.7);resize:vertical;min-height:110px;line-height:1.85;transition:.3s}
+.card-bd textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 14px var(--gold-glow);background:rgba(255,253,248,0.85)}
+.card-bd textarea::placeholder{color:var(--text-dim)}
+.readonly-render{font-size:13.5px;line-height:2.1;color:var(--text-pri);min-height:18px}
+.readonly-render:empty::after{content:'（暂无内容）';color:var(--text-dim);font-style:italic}
+.readonly-render img{max-width:100%;border-radius:6px;margin:8px 0;border:1px solid var(--gold-border)}
+
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.tag-row .kw{font-size:10.5px;padding:4px 12px;border-radius:14px;border:1px solid var(--gold-border);color:var(--text-sec);cursor:pointer;transition:.2s;background:rgba(250,247,240,.6);font-weight:400}
+.tag-row .kw:hover{border-color:var(--gold);color:var(--gold-dark);background:rgba(200,160,60,.06);transform:translateY(-1px)}
+
+.upload-zone{border:1.5px dashed var(--gold-border);border-radius:8px;padding:16px;text-align:center;cursor:pointer;margin-top:10px;transition:.3s;background:rgba(250,247,240,.5)}
+.upload-zone:hover{border-color:var(--gold);background:rgba(250,247,240,.75)}.upload-zone input{display:none}
+.upload-zone .hint{color:var(--text-dim);font-size:12.5px}
+.img-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.img-row .thumb{width:74px;height:74px;object-fit:cover;border-radius:6px;border:1px solid var(--gold-border);cursor:pointer;transition:.25s}
+.img-row .thumb:hover{border-color:var(--gold);transform:scale(1.06);box-shadow:var(--shadow-sm)}
+
+.math-bar{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0;padding:8px 12px;background:rgba(250,247,240,.65);border-radius:8px;border:1px solid rgba(180,150,80,.14)}
+.math-bar button{padding:4px 9px;border:1.5px solid var(--gold-border);border-radius:5px;background:var(--card-bg);color:var(--text-sec);cursor:pointer;font-size:10.5px;font-family:monospace;transition:.2s;font-weight:500}
+.math-bar button:hover{border-color:var(--gold);color:var(--gold-dark);background:linear-gradient(180deg,#fffef8,#f8f3e6)}
+.math-bar .sep{width:1px;background:rgba(180,150,80,.2);margin:0 3px}
+.math-preview{margin-top:8px;padding:12px;border-radius:8px;border:1px solid var(--gold-border);background:rgba(250,247,240,.65);min-height:26px;display:none;font-size:13.5px;overflow-x:auto}
+.math-preview.show{display:block}
+
+/* lightbox */
+.lightbox{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.87);backdrop-filter:blur(10px);align-items:center;justify-content:center;cursor:pointer}
+.lightbox.show{display:flex}
+.lightbox img{max-width:92%;max-height:92%;border-radius:10px;border:2px solid var(--gold-light);box-shadow:0 8px 40px rgba(0,0,0,.4)}
+
+/* password overlay */
+.pwd-overlay{position:fixed;inset:0;z-index:150;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center}
+.pwd-overlay.hidden{display:none}
+.pwd-box{background:linear-gradient(145deg,rgba(255,252,247,0.99),rgba(252,247,235,0.97));border:2px solid var(--gold);border-radius:14px;padding:28px 36px;text-align:center;box-shadow:var(--shadow-md)}
+.pwd-box h4{font-family:'ZCOOL XiaoWei','Noto Serif SC',serif;color:var(--gold-dark);font-size:17px;margin-bottom:14px;letter-spacing:2px}
+.pwd-box input{padding:11px 16px;border:1.5px solid var(--gold-border);border-radius:10px;font-size:15px;font-family:inherit;color:var(--text-pri);background:var(--ivory);width:220px;text-align:center;letter-spacing:3px}
+.pwd-box input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 14px var(--gold-glow)}
+.pwd-box .pwd-btns{margin-top:16px;display:flex;gap:12px;justify-content:center}
+.pwd-box button{padding:9px 24px;border-radius:10px;cursor:pointer;font-size:13.5px;font-family:inherit;transition:.2s}
+.pwd-box .btn-ok{background:linear-gradient(135deg,#f5e6c3,#e8d4a0);color:var(--gold-dark);border:1px solid var(--gold);font-weight:700}
+.pwd-box .btn-ok:hover{box-shadow:0 3px 12px var(--gold-glow)}
+.pwd-box .btn-cancel{background:var(--ivory);color:var(--text-sec);border:1px solid var(--gold-border)}
+.pwd-box .btn-cancel:hover{background:var(--ivory-dark)}
+
+/* toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 28px;border-radius:10px;background:linear-gradient(135deg,var(--gold-dark),#9a7b1a);color:#fff;font-size:13px;z-index:300;opacity:0;transition:.3s;pointer-events:none;letter-spacing:1px;font-weight:500}
+.toast.show{opacity:1}
+
+/* 进度条 */
+.progress-bar{padding:12px 16px;border-top:1px solid var(--gold-border);background:rgba(250,246,237,.55)}
+.progress-bar .prog-label{font-size:11.5px;color:var(--text-sec);display:flex;justify-content:space-between;margin-bottom:6px}
+.progress-bar .prog-track{height:7px;background:var(--ivory-dark);border-radius:4px;overflow:hidden}
+.progress-bar .prog-fill{height:100%;background:linear-gradient(90deg,var(--gold-light),var(--gold),var(--gold-light));border-radius:4px;transition:.6s ease}
+
+/* ====== MOBILE ====== */
+@media(max-width:768px){
+  .sidebar{position:fixed;left:-100%;top:0;height:100vh;z-index:100;transition:left .3s;box-shadow:4px 0 24px rgba(0,0,0,.12)}
+  .sidebar.open{left:0}
+  .sidebar-close-btn{display:block}
+  .menu-btn{display:flex}
+  .overlay-mask.show{display:block}
+  .header-banner{min-height:260px}
+  .header-banner .header-inner{padding-top:170px}
+  .header-banner h1{font-size:36px;letter-spacing:4px}
+  .content{padding:16px 14px}
+  .card-bd textarea{font-size:16px}
+  .toolbar{padding:10px 14px}
+  .toolbar h3{font-size:13.5px}
+  .chapter-meta{padding:11px 14px;font-size:11.5px}
+}
+@media(max-width:480px){
+  .header-banner{min-height:200px;padding:0 12px 14px}
+  .header-banner .header-inner{padding-top:130px}
+  .header-banner h1{font-size:28px;letter-spacing:3px}
+  .section-card{border-radius:10px}
+  .toolbar button{padding:5px 9px;font-size:10px}
+  .content{padding:12px 10px}
+}
+
+/* ====== 首页 ====== */
+.home-page{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;transition:opacity .6s ease,visibility .6s ease}
+.home-page.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.home-bg{position:absolute;inset:0}
+.home-bg img{width:100%;height:100%;object-fit:cover;object-position:center 20%}
+.home-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.25) 0%,rgba(0,0,0,0.10) 40%,rgba(0,0,0,0.45) 100%)}
+.home-content{position:relative;z-index:1;text-align:center;color:#fff;padding:0 24px}
+.home-content h1{font-family:'Ma Shan Zheng','ZCOOL XiaoWei','Noto Serif SC',serif;font-size:64px;letter-spacing:10px;font-weight:900;text-shadow:0 2px 20px rgba(0,0,0,0.5);margin-bottom:12px}
+.home-content .sub{font-size:16px;letter-spacing:4px;opacity:0.85;margin-bottom:40px}
+.home-content .enter-btn{display:inline-block;padding:14px 52px;font-size:18px;letter-spacing:6px;font-weight:700;color:#fff;background:rgba(201,162,39,0.55);border:2px solid rgba(255,255,255,0.7);border-radius:12px;cursor:pointer;transition:.35s;font-family:inherit;text-shadow:0 1px 4px rgba(0,0,0,0.3);backdrop-filter:blur(4px)}
+.home-content .enter-btn:hover{background:rgba(201,162,39,0.85);border-color:#fff;transform:translateY(-2px);box-shadow:0 6px 24px rgba(201,162,39,0.4)}
+@media(max-width:768px){.home-content h1{font-size:38px;letter-spacing:5px}.home-content .enter-btn{padding:12px 36px;font-size:15px}}
+</style>
+</head>
+<body>
+<!-- 首页 -->
+<div class="home-page" id="homePage">
+  <div class="home-bg"><img id="homeBgImg" src="" alt=""></div>
+  <div class="home-content">
+    <h1>初中数学 · 苏科版</h1>
+    <div class="sub">— crafted by kax —</div>
+    <button class="enter-btn" onclick="enterSite()">数学，启动！</button>
+  </div>
+</div>
+
+
+<!-- 背景图层 -->
+<div class="bg-layer" id="bgLayer"></div>
+
+<!-- 页眉横幅 -->
+<div class="header-banner" id="headerBanner">
+  <div class="header-inner">
+    <h1 id="headerTitle">初中数学 · 苏科版</h1>
+    <div class="author-mark">— crafted by <em>kax</em> —</div>
+  </div>
+</div>
+
+<div class="overlay-mask" id="overlayMask" onclick="closeSidebar()"></div>
+<button class="menu-btn" onclick="openSidebar()"><span></span></button>
+
+<div class="app" id="appContainer" style="display:none">
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <button class="sidebar-close-btn" onclick="closeSidebar()">✕</button>
+    <div class="sidebar-header">
+      <h2>章节导航</h2>
+      <div class="sub">苏科版 · 新教材</div>
+    </div>
+    <div class="sidebar-stats">
+      <span>已填 <b id="stats-filled">0</b>/32章</span>
+      <span>约 <b id="stats-words">0</b>千字</span>
+    </div>
+    <input class="search-box" id="searchBox" placeholder="搜索章节…" oninput="filterChapters()">
+    <div class="nav" id="chapterNav"></div>
+    <div class="progress-bar">
+      <div class="prog-label"><span>备课进度</span><span id="progPct">0%</span></div>
+      <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="toolbar">
+      <h3 id="currentTitle">选择章节开始</h3>
+      <span class="mode-tag view" id="modeBadge">只读</span>
+      <button onclick="toggleEditMode()" id="btnEditToggle">开启编辑</button>
+      <button onclick="saveData()" id="btnSave" style="display:none">保存</button>
+    </div>
+    <div class="content" id="mainContent">
+      <div class="empty-state">
+        <div class="emblem">✦</div>
+        <h4>苏科版初中数学 · 32章</h4>
+        <p>从左侧选择章节开始浏览<br>知识要点 · 核心素养 · 易错清单 · KAX真题 · 备课笔记 · 作业设计</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 密码验证 -->
+<div class="pwd-overlay hidden" id="pwdOverlay">
+  <div class="pwd-box">
+    <h4>输入编辑密码</h4>
+    <input type="password" id="pwdInput" onkeydown="if(event.key==='Enter')checkPwd()">
+    <div class="pwd-btns"><button class="btn-ok" onclick="checkPwd()">确认</button><button class="btn-cancel" onclick="document.getElementById('pwdOverlay').classList.add('hidden')">取消</button></div>
+  </div>
+</div>
+
+<!-- 灯箱 -->
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('show')"><img id="lightboxImg"></div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- ========== 图片数据（base64内嵌） ========== -->
 <script>
 const IMG_DATA = {};
 </script>
@@ -21,12 +353,17 @@ const gColors={
 };
 const elDots={'风':'#5b9bd5','岩':'#c9a96e','雷':'#9b7fd4','草':'#6daa6f','水':'#5babc4','火':'#e07b54','冰':'#7ec8e3'};
 
-// 每章分配的底部大图
+// 每章分配的底部大图（每章一张）
 const CH_FOOTER_IMG = {
+  // 七上
   '7a-1':'scene_1','7a-2':'char_1','7a-3':'extra_1','7a-4':'extra_2','7a-5':'char_2','7a-6':'scene_2',
+  // 七下
   '7b-1':'scene_3','7b-2':'char_3','7b-3':'extra_3','7b-4':'extra_4','7b-5':'extra_5','7b-6':'extra_6',
+  // 八上
   '8a-1':'char_1','8a-2':'char_2','8a-3':'scene_1','8a-4':'extra_1','8a-5':'extra_7','8a-6':'scene_2',
+  // 八下
   '8b-1':'scene_3','8b-2':'char_3','8b-3':'extra_3','8b-4':'extra_4','8b-5':'extra_5',
+  // 九年级
   '9-1':'char_1','9-2':'char_2','9-3':'scene_1','9-4':'extra_1','9-5':'extra_2','9-6':'char_3','9-7':'scene_3','9-8':'extra_3','9-9':'extra_7'
 };
 
@@ -77,8 +414,7 @@ function loadData(){
   const s=localStorage.getItem('skb7_data');if(s){try{chapterData=JSON.parse(s)}catch{chapterData={}}}
   updateStats()}
 function saveData(){localStorage.setItem('skb7_data',JSON.stringify(chapterData));updateStats();showToast('已保存')}
-let at;function autoSave(){clearTimeout(at);at=setTimeout(()=>{localStorage.setItem('skb7_data',JSON.stringify(chapterData));updateStats()},600)}
-function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000)}
+let at;function autoSave(){clearTimeout(at);at=setTimeout(()=>{localStorage.setItem('skb7_data',JSON.stringify(chapterData));updateStats()},600)}function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000)}
 function updateStats(){
   let f=0,w=0;
   for(const d of Object.values(chapterData)){const t=[d.knowledge,d.competency,d.mistakes,d.kax,d.lessonPlan,d.homework].filter(Boolean).join('');if(t.length>10)f++;w+=t.length}
@@ -97,177 +433,37 @@ function toggleEditMode(){
   else{document.getElementById('pwdOverlay').classList.remove('hidden');document.getElementById('pwdInput').value='';document.getElementById('pwdInput').focus()}}
 function checkPwd(){if(document.getElementById('pwdInput').value===EP){isEditMode=true;document.getElementById('pwdOverlay').classList.add('hidden');document.getElementById('modeBadge').className='mode-tag edit';document.getElementById('modeBadge').textContent='编辑中';document.getElementById('btnEditToggle').textContent='退出编辑';document.getElementById('btnSave').style.display='';if(currentChapter)renderContent(currentChapter);showToast('编辑模式已开启')}else{showToast('密码错误')}}
 
-function getGrade(id){if(id.startsWith('7a'))return '七上';if(id.startsWith('7b'))return '七下';if(id.startsWith('8a'))return '八上';if(id.startsWith('8b'))return '八下';return '九年级'}
+function getGrade(id){if(id.startsWith('7a'))return'七上';if(id.startsWith('7b'))return'七下';if(id.startsWith('8a'))return'八上';if(id.startsWith('8b'))return'八下';return'九年级'}
 
 // 设置背景图
 function setGradeBg(grade){
   const gc=gColors[grade];
   const bgLayer=document.getElementById('bgLayer');
   if(IMG_DATA[gc.bgRole]){
-    bgLayer.style.backgroundImage='url("'+IMG_DATA[gc.bgRole]+'")';
+    bgLayer.style.backgroundImage='url('+IMG_DATA[gc.bgRole]+')';
   }
 }
 
-// 设置页眉
+// 设置页眉（img标签完整展示）
 function setHeader(){
   const hb=document.getElementById('headerBanner');
-  const oldImg=hb.querySelector('.header-full-img');
-  if(oldImg)oldImg.remove();
   if(IMG_DATA['header']){
     const img=document.createElement('img');
-    img.src=IMG_DATA['header'];img.alt='';img.className='header-full-img';img.loading='eager';
+    img.src=IMG_DATA['header'];
+    img.alt='';img.className='header-full-img';
+    img.loading='eager';
+    // 插入到header-inner之前作为背景图
     hb.insertBefore(img, hb.firstChild);
   }
 }
 
-// 章节底部大图
+// 生成章节底部大图HTML
 function footerImgHtml(chId){
   const role=CH_FOOTER_IMG[chId];
   if(!role||!IMG_DATA[role]) return '';
-  return '<div class="chapter-footer-img"><img src="'+IMG_DATA[role]+'" alt="" loading="lazy" onclick="openLb(this.src)"></div>';
+  return '<div class="chapter-footer-img"><img src=\"'+IMG_DATA[role]+'\" alt="" loading="lazy" onclick="openLb(this.src)"></div>';
 }
 
-// ====== 富文本编辑器函数 ======
-function richCmd(cmd){
-  document.execCommand(cmd, false, null);
-  // 触发保存
-  const ed=document.querySelector('.rich-edit:focus');
-  if(ed) richAutoSave(ed);
-}
-function richInsertLink(editorId){
-  const url=prompt('输入链接URL：', 'https://');
-  if(!url)return;
-  const txt=prompt('显示文字（留空则用URL）：', '') || url;
-  const ed=document.getElementById(editorId);
-  ed.focus();
-  const sel=window.getSelection();
-  if(sel.rangeCount){
-    const range=sel.getRangeAt(0);
-    const a=document.createElement('a');
-    a.href=url; a.textContent=txt; a.target='_blank'; a.rel='noopener';
-    range.deleteContents();
-    range.insertNode(a);
-    // 光标移到插入内容后
-    const newRange=document.createRange();
-    newRange.setStartAfter(a);
-    newRange.collapse(true);
-    sel.removeAllRanges();
-    sel.addRange(newRange);
-  }
-  richAutoSave(ed);
-}
-function richUploadImg(chId, field, editorId){
-  const input=document.createElement('input');
-  input.type='file'; input.accept='image/*';
-  input.onchange=function(){
-    const f=this.files[0]; if(!f)return;
-    if(f.size>3*1024*1024){showToast('图片不超过3MB');return}
-    const r=new FileReader();
-    r.onload=function(e){
-      const img=new Image();
-      img.onload=function(){
-        const canvas=document.createElement('canvas');
-        let w=img.width, h=img.height;
-        const maxDim=1200;
-        if(w>maxDim||h>maxDim){if(w>=h){h=Math.round(h*w/maxDim);w=maxDim}else{w=Math.round(w*h/maxDim);h=maxDim}}
-        canvas.width=w; canvas.height=h;
-        canvas.getContext('2d').drawImage(img,0,0,w,h);
-        const dataUrl=canvas.toDataURL('image/jpeg',0.8);
-        const ed=document.getElementById(editorId);
-        ed.focus();
-        const sel=window.getSelection();
-        const imgEl=document.createElement('img');
-        imgEl.src=dataUrl; imgEl.alt='上传的图片';
-        if(sel.rangeCount){const range=sel.getRangeAt(0);range.deleteContents();range.insertNode(imgEl)}
-        richAutoSave(ed);
-        showToast('图片已插入');
-      };
-      img.src=e.target.result;
-    };
-    r.readAsDataURL(f);
-  };
-  input.click();
-}
-function richUploadFile(chId, field, editorId){
-  const input=document.createElement('input');
-  input.type='file';
-  input.onchange=function(){
-    const f=this.files[0]; if(!f)return;
-    if(f.size>5*1024*1024){showToast('文件不超过5MB');return}
-    const r=new FileReader();
-    r.onload=function(e){
-      const d=chapterData[chId]; if(!d)return;
-      if(!d[field+'_atts'])d[field+'_atts']=[];
-      const attIdx=d[field+'_atts'].length;
-      d[field+'_atts'].push({name:f.name,data:e.target.result,size:f.size});
-      autoSave();
-      // 在编辑器中插入文件badge
-      const ed=document.getElementById(editorId);
-      ed.focus();
-      const sel=window.getSelection();
-      const badge=document.createElement('span');
-      badge.className='file-badge';
-      badge.contentEditable='false';
-      badge.dataset.attIdx=attIdx;
-      badge.textContent='📎 '+f.name;
-      if(sel.rangeCount){const range=sel.getRangeAt(0);range.deleteContents();range.insertNode(badge)}
-      richAutoSave(ed);
-      // 重新渲染以显示附件区
-      if(currentChapter)renderContent(currentChapter);
-      showToast('文件已上传：'+f.name);
-    };
-    r.readAsDataURL(f);
-  };
-  input.click();
-}
-function richPaste(event, editorId){
-  const items=(event.clipboardData||event.originalEvent.clipboardData).items;
-  for(let i=0;i<items.length;i++){
-    if(items[i].type.indexOf('image')!==-1){
-      event.preventDefault();
-      const blob=items[i].getAsFile();
-      const r=new FileReader();
-      r.onload=function(e){
-        const imgEl=document.createElement('img');
-        imgEl.src=e.target.result; imgEl.alt='粘贴的图片';
-        const ed=document.getElementById(editorId);
-        ed.focus();
-        const sel=window.getSelection();
-        if(sel.rangeCount){const range=sel.getRangeAt(0);range.deleteContents();range.insertNode(imgEl)}
-        richAutoSave(ed);
-      };
-      r.readAsDataURL(blob);
-      return;
-    }
-  }
-}
-function richAutoSave(editor){
-  const chId=editor.dataset.chid, field=editor.dataset.field;
-  if(!chapterData[chId])chapterData[chId]={};
-  chapterData[chId][field]=editor.innerHTML;
-  renderNav();
-  clearTimeout(editor._saveTimer);
-  editor._saveTimer=setTimeout(()=>{localStorage.setItem('skb7_data',JSON.stringify(chapterData));updateStats()},600);
-}
-function richInsTag(tagEl, field, chId){
-  const ed=document.getElementById('ed-'+field);
-  if(!ed)return;
-  const txt=tagEl.textContent;
-  ed.focus();
-  const sel=window.getSelection();
-  if(sel.rangeCount){const range=sel.getRangeAt(0);range.deleteContents();range.insertNode(document.createTextNode(txt))}
-  richAutoSave(ed);
-}
-function richDelAtt(chId, field, idx){
-  if(!confirm('确定删除这个附件？'))return;
-  if(chapterData[chId]&&chapterData[chId][field+'_atts']){
-    chapterData[chId][field+'_atts'].splice(idx,1);
-    autoSave();
-    renderContent(currentChapter);
-  }
-}
-
-// ====== 渲染导航 ======
 function renderNav(){
   const nav=document.getElementById('chapterNav');nav.innerHTML='';
   for(const[grade,data]of Object.entries(textbook)){
@@ -284,20 +480,16 @@ function renderNav(){
     g.appendChild(t);g.appendChild(cd);nav.appendChild(g)}}
 function filterChapters(){const q=document.getElementById('searchBox').value.toLowerCase();document.querySelectorAll('.chapter-item').forEach(it=>{const n=(it.dataset.name||'').toLowerCase(),g=(it.dataset.grade||'').toLowerCase();it.style.display=(!q||n.includes(q)||g.includes(q))?'':'none'})}
 
-// ====== 选择章节 ======
 function selectChapter(ch,item){
   currentChapter=ch;document.querySelectorAll('.chapter-item.active').forEach(el=>el.classList.remove('active'));item.classList.add('active');
   document.getElementById('currentTitle').textContent='第'+ch.num+'章 · '+ch.name;
   setGradeBg(getGrade(ch.id));
-  if(!chapterData[ch.id])chapterData[ch.id]={knowledge:'',competency:'',mistakes:'',kax:'',lessonPlan:'',homework:'',images:[],knowledge_atts:[],competency_atts:[],mistakes_atts:[],kax_atts:[],lessonPlan_atts:[],homework_atts:[]};
-  renderContent(ch);
-}
+  if(!chapterData[ch.id])chapterData[ch.id]={knowledge:'',competency:'',mistakes:'',kax:'',lessonPlan:'',homework:'',images:[]};renderContent(ch)}
 
-// ====== 渲染内容（富文本版） ======
 function renderContent(ch){
   const d=chapterData[ch.id],main=document.getElementById('mainContent'),ed=isEditMode,grade=getGrade(ch.id),gc=gColors[grade];
   const secs=[
-    {f:'knowledge',icon:'📖',title:'知识要点',tag:'核心',ph:'本章核心知识点、公式、定理、性质……'},
+    {f:'knowledge',icon:'📖',title:'知识要点',tag:'核心',ph:'本章核心知识点、公式、定理、性质……',st:true},
     {f:'competency',icon:'🎯',title:'核心素养与教学目标',tag:'课标',ph:'六大核心素养目标、教学重难点、教学方法……'},
     {f:'mistakes',icon:'⚠️',title:'易错清单',tag:'错因',ph:'学生常见错误类型、认知根源分析、干预策略……'},
     {f:'kax',icon:'📋',title:'KAX真题精选',tag:'真题',ph:'从KAX工具书中摘录典型真题，标注年份、地区、来源ID……'},
@@ -307,51 +499,20 @@ function renderContent(ch){
 
   let html = '';
 
-  // 章节信息栏
+  // 章节信息栏（去掉考频文字）
   html += '<div class="chapter-meta"><div class="meta-item">教材：<b>苏科版 · '+grade+'</b></div><div class="meta-item">第 '+ch.num+' 章 · '+ch.name+'</div></div>';
 
   // 各内容卡片
   secs.forEach(s=>{
     const v=d[s.f]||'';
-    const atts=(d[s.f+'_atts']||[]);
     html+='<div class="section-card"><div class="card-hd" onclick="this.nextElementSibling.classList.toggle(\'collapsed\');this.querySelector(\'.hd-toggle\').classList.toggle(\'collapsed\')"><span class="hd-icon">'+s.icon+'</span><span class="hd-title">'+s.title+'</span>'+(s.tag?'<span class="hd-tag '+gc.tc+'">'+s.tag+'</span>':'')+'<span class="hd-toggle">▼</span></div><div class="card-bd">';
     if(ed){
-      // 富文本工具栏
-      const eid='ed-'+s.f;
-      html+='<div class="rich-bar">';
-      html+='<button onclick="document.execCommand(\'bold\')"><b>B</b></button>';
-      html+='<button onclick="document.execCommand(\'italic\')"><i>I</i></button>';
-      html+='<button onclick="document.execCommand(\'underline\')"><u>U</u></button>';
-      html+='<span class="bar-sep"></span>';
-      html+='<button onclick="richInsertLink(\''+eid+'\')">🔗 链接</button>';
-      html+='<label><input type="file" accept="image/*" style="display:none" onchange="richUploadImgFromLabel(this,\''+ch.id+'\',\''+s.f+'\',\''+eid+'\')">🖼️ 图片</label>';
-      html+='<label><input type="file" style="display:none" onchange="richUploadFileFromLabel(this,\''+ch.id+'\',\''+s.f+'\',\''+eid+'\')">📎 文件</label>';
-      html+='<span class="bar-sep"></span>';
-      html+='<button onclick="richInsertMath(\''+eid+'\')">∑ 公式</button>';
-      html+='</div>';
-      // 富文本编辑器
-      html+='<div class="rich-edit" id="'+eid+'" data-chid="'+ch.id+'" data-field="'+s.f+'" oninput="richAutoSave(this)" onpaste="richPaste(event,\''+eid+'\')">'+v+'</div>';
-      // 附件区
-      if(atts.length>0){
-        html+='<div class="att-zone"><div class="att-title">📎 附件（'+atts.length+'个）</div><div class="att-list">';
-        atts.forEach((att,i)=>{
-          const blob=new Blob([att.data],{type:'application/octet-stream'});
-          const url=URL.createObjectURL(blob);
-          html+='<div class="att-item">';
-          html+='<span class="att-ic">📄</span>';
-          html+='<span class="att-name">'+esc(att.name)+'</span>';
-          html+='<a class="att-dl" href="'+att.data+'" download="'+esc(att.name)+'">下载</a>';
-          html+='<span class="att-del" onclick="richDelAtt(\''+ch.id+'\',\''+s.f+'\','+i+')">删除</span>';
-          html+='</div>';
-        });
-        html+='</div></div>';
-      }
-      if(s.st&&ch.keywords)html+='<div class="tag-row">'+ch.keywords.map(k=>'<span class="kw" onclick="richInsTag(this,\''+s.f+'\',\''+ch.id+'\')">'+k+'</span>').join('')+'</div>'
+      html+='<textarea placeholder="'+s.ph+'" oninput="autoSaveCh(\''+ch.id+'\',\''+s.f+'\',this.value);updateMP(this,\'mp-'+s.f+'\')">'+v+'</textarea><div class="math-preview" id="mp-'+s.f+'"></div>';
+      if(s.st&&ch.keywords)html+='<div class="tag-row">'+ch.keywords.map(k=>'<span class="kw" onclick="insTag(this,\''+s.f+'\',\''+ch.id+'\')">'+k+'</span>').join('')+'</div>'
     } else {
-      html+='<div class="rich-view">'+(v||'')+'</div>';
+      html+='<div class="readonly-render">'+(v||'')+'</div>';
     }
-    html+='</div></div>';
-  });
+    html+='</div></div>'});
 
   // 图片素材区
   const imgs=d.images||[];
@@ -365,92 +526,27 @@ function renderContent(ch){
 
   if(ed){
     html+='<div class="section-card"><div class="card-hd" onclick="this.nextElementSibling.classList.toggle(\'collapsed\');this.querySelector(\'.hd-toggle\').classList.toggle(\'collapsed\')"><span class="hd-icon">∑</span><span class="hd-title">公式快速插入</span><span class="hd-tag '+gc.tc+'">LaTeX</span><span class="hd-toggle">▼</span></div><div class="card-bd"><div class="math-bar">'+
-      mb('x²','$x^2$')+mb('√x','$\\sqrt{x}$')+mb('a/b','$\\frac{a}{b}$')+mb('±','$\\pm$')+
-      mb('≠','$\neq$')+mb('≤','$\leq$')+mb('≥','$\geq$')+mb('△','$\triangle$')+
-      mb('∠','$\angle$')+mb('∥','$\parallel$')+mb('⊥','$\perp$')+
-      mb('π','$\pi$')+mb('°','$\circ$')+
-      '<span class="bar-sep"></span>'+
-      mb('y=kx+b','$y=kx+b$')+mb('二次函数','$y=ax^2+bx+c$')+mb('勾股','$a^2+b^2=c^2$')+
-      mb('Δ','$\Delta=b^2-4ac$')+mb('求根','$x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$')+
-      '</div><div style="font-size:11px;color:var(--text-dim);margin-top:6px">点击按钮插入到任意编辑区 · 支持 <code style="color:'+gc.acc+'">$公式$</code> 语法</div></div></div>'
+    mb('x²','$x^2$')+mb('√x','$\\sqrt{x}$')+mb('a/b','$\\frac{a}{b}$')+mb('±','$\\pm$')+
+    mb('≠','$\\neq$')+mb('≤','$\\leq$')+mb('≥','$\\geq$')+mb('△','$\\triangle$')+
+    mb('∠','$\\angle$')+mb('∥','$\\parallel$')+mb('⊥','$\\perp$')+
+    mb('π','$\\pi$')+mb('°','$\\circ$')+
+    '<span class="sep"></span>'+
+    mb('y=kx+b','$y=kx+b$')+mb('二次函数','$y=ax^2+bx+c$')+mb('勾股','$a^2+b^2=c^2$')+
+    mb('Δ','$\Delta=b^2-4ac$')+mb('求根','$x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}$')+
+    '</div><div style="font-size:11px;color:var(--text-dim);margin-top:6px">点击按钮插入到任意编辑区 · 支持 <code style="color:'+gc.acc+'">$公式$</code> 语法</div></div></div>'
   }
 
   main.innerHTML=html;
-  if(!ed&&window.MathJax)setTimeout(()=>MathJax.typesetPromise([main]),100);
-}
-
-// richUploadImgFromLabel / richUploadFileFromLabel (for label-wrapped input)
-function richUploadImgFromLabel(input, chId, field, editorId){
-  const f=input.files[0]; if(!f)return;
-  if(f.size>3*1024*1024){showToast('图片不超过3MB');return}
-  const r=new FileReader();
-  r.onload=function(e){
-    const img=new Image();
-    img.onload=function(){
-      const canvas=document.createElement('canvas');
-      let w=img.width, h=img.height;
-      const maxDim=1200;
-      if(w>maxDim||h>maxDim){if(w>=h){h=Math.round(h*w/maxDim);w=maxDim}else{w=Math.round(w*h/maxDim);h=maxDim}}
-      canvas.width=w; canvas.height=h;
-      canvas.getContext('2d').drawImage(img,0,0,w,h);
-      const dataUrl=canvas.toDataURL('image/jpeg',0.8);
-      const ed=document.getElementById(editorId);
-      ed.focus();
-      const sel=window.getSelection();
-      const imgEl=document.createElement('img');
-      imgEl.src=dataUrl; imgEl.alt='上传的图片';
-      if(sel.rangeCount){const range=sel.getRangeAt(0);range.deleteContents();range.insertNode(imgEl)}
-      richAutoSave(ed);
-      showToast('图片已插入');
-    };
-    img.src=e.target.result;
-  };
-  r.readAsDataURL(f);
-  input.value='';
-}
-function richUploadFileFromLabel(input, chId, field, editorId){
-  const f=input.files[0]; if(!f)return;
-  if(f.size>5*1024*1024){showToast('文件不超过5MB');return}
-  const r=new FileReader();
-  r.onload=function(e){
-    const d=chapterData[chId]; if(!d)return;
-    if(!d[field+'_atts'])d[field+'_atts']=[];
-    d[field+'_atts'].push({name:f.name,data:e.target.result,size:f.size});
-    autoSave();
-    const ed=document.getElementById(editorId);
-    ed.focus();
-    const sel=window.getSelection();
-    const badge=document.createElement('span');
-    badge.className='file-badge';badge.contentEditable='false';badge.dataset.attIdx=d[field+'_atts'].length-1;badge.textContent='📎 '+f.name;
-    if(sel.rangeCount){const range=sel.getRangeAt(0);range.deleteContents();range.insertNode(badge)}
-    richAutoSave(ed);
-    if(currentChapter)renderContent(currentChapter);
-    showToast('文件已上传：'+f.name);
-  };
-  r.readAsDataURL(f);
-  input.value='';
-}
-function richInsertMath(editorId){
-  const formula=prompt('输入LaTeX公式（无需$分隔符）：', 'x^2');
-  if(!formula)return;
-  const ed=document.getElementById(editorId);
-  ed.focus();
-  const sel=window.getSelection();
-  const span=document.createElement('span');
-  span.textContent='$'+formula+'$';
-  if(sel.rangeCount){const range=sel.getRangeAt(0);range.deleteContents();range.insertNode(span)}
-  richAutoSave(ed);
-  if(window.MathJax)MathJax.typesetPromise([ed]);
-}
+  if(!ed)setTimeout(()=>{if(window.MathJax)MathJax.typesetPromise([main])},100)}
 function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
-
 function mb(l,c){return'<button onclick="insLT(\''+(currentChapter?currentChapter.id:'')+'\',\''+(c||'')+'\')">'+l+'</button>'}
 
 function autoSaveCh(id,f,v){if(!chapterData[id])chapterData[id]={};chapterData[id][f]=v;renderNav();autoSave()}
-function insLT(id,code){const ed=document.querySelector('.rich-edit');if(!ed)return;const s=ed.selectionStart,e=ed.selectionEnd;ed.textContent=ed.textContent.substring(0,s)+code+ed.textContent.substring(e);ed.focus();richAutoSave(ed);if(window.MathJax)MathJax.typesetPromise([ed])}
+function updateMP(ta,pid){const pv=document.getElementById(pid);if(!pv)return;const v=ta.value,hm=v.includes('$');if(!hm){pv.classList.remove('show');pv.innerHTML='';return}pv.classList.add('show');pv.innerHTML='<span style="color:var(--text-dim);font-size:11px">公式预览：</span>'+v;if(window.MathJax)MathJax.typesetPromise([pv])}
+function insTag(tag,f,id){const ta=document.querySelector('textarea[oninput*="'+f+'"]');if(!ta)return;const s=ta.selectionStart,e=ta.selectionEnd;ta.value=ta.value.substring(0,s)+tag.textContent+ta.value.substring(e);ta.selectionStart=ta.selectionEnd=s+tag.textContent.length;autoSaveCh(id,f,ta.value);ta.focus()}
+function insLT(id,code){const ta=document.querySelector('#mainContent textarea');if(!ta)return;const s=ta.selectionStart,e=ta.selectionEnd,ma=ta.getAttribute('oninput').match(/'(\w+)'/);if(!ma)return;const f=ma[1];ta.value=ta.value.substring(0,s)+code+ta.value.substring(e);ta.selectionStart=ta.selectionEnd=s+code.length;autoSaveCh(id,f,ta.value);ta.focus();updateMP(ta,'mp-'+f)}
 
 function uploadImg(id,input){const f=input.files[0];if(!f)return;if(f.size>2*1024*1024){showToast('图片不超过2MB');return}const r=new FileReader();r.onload=function(e){if(!chapterData[id])chapterData[id]={};if(!chapterData[id].images)chapterData[id].images=[];chapterData[id].images.push(e.target.result);autoSave();renderContent(currentChapter);showToast('已上传')};r.readAsDataURL(f);input.value=''}
-
 function openLb(src){document.getElementById('lightboxImg').src=src;document.getElementById('lightbox').classList.add('show')}
 
 // ====== 加载图片数据并初始化 ======
@@ -500,7 +596,6 @@ document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='s'){
 window.addEventListener('beforeunload',()=>{
   localStorage.setItem('skb7_data',JSON.stringify(chapterData));
 });
-</script>
 </script>
 </body>
 </html>
