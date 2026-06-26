@@ -462,8 +462,25 @@ function closeSidebar(){document.getElementById('sidebar').classList.remove('ope
 function selAndClose(ch,item){selectChapter(ch,item);if(window.innerWidth<=768)closeSidebar()}
 
 function toggleEditMode(){
-  if(isEditMode){isEditMode=false;document.getElementById('modeBadge').className='mode-tag view';document.getElementById('modeBadge').textContent='只读';document.getElementById('btnEditToggle').textContent='开启编辑';document.getElementById('btnSave').style.display='none';if(currentChapter)renderContent(currentChapter)}
-  else{document.getElementById('pwdOverlay').classList.remove('hidden');document.getElementById('pwdInput').value='';document.getElementById('pwdInput').focus()}}
+  if(isEditMode){
+    isEditMode=false;
+    /* 退出前强制把当前编辑器内容刷进 chapterData */
+    document.querySelectorAll('.editor-area').forEach(el=>{
+      const f=el.dataset.field, chId=el.dataset.chid||currentChapter;
+      if(f&&chId) autoSaveCh(chId,f,el.innerHTML);
+    });
+    localStorage.setItem('skb7_data',JSON.stringify(chapterData));
+    document.getElementById('modeBadge').className='mode-tag view';
+    document.getElementById('modeBadge').textContent='只读';
+    document.getElementById('btnEditToggle').textContent='开启编辑';
+    document.getElementById('btnSave').style.display='none';
+    if(currentChapter) renderContent(currentChapter);
+  } else{
+    document.getElementById('pwdOverlay').classList.remove('hidden');
+    document.getElementById('pwdInput').value='';
+    document.getElementById('pwdInput').focus();
+  }
+}
 function checkPwd(){if(document.getElementById('pwdInput').value===EP){isEditMode=true;document.getElementById('pwdOverlay').classList.add('hidden');document.getElementById('modeBadge').className='mode-tag edit';document.getElementById('modeBadge').textContent='编辑中';document.getElementById('btnEditToggle').textContent='退出编辑';document.getElementById('btnSave').style.display='';if(currentChapter)renderContent(currentChapter);showToast('编辑模式已开启')}else{showToast('密码错误')}}
 
 function getGrade(id){if(id.startsWith('7a'))return'七上';if(id.startsWith('7b'))return'七下';if(id.startsWith('8a'))return'八上';if(id.startsWith('8b'))return'八下';return'九年级'}
@@ -567,7 +584,7 @@ function renderContent(ch){
       swatches.forEach(([c,n])=>{html+='<div class="color-swatch" style="background:'+c+'" onclick="doForeColor(\''+c+'\',\''+s.f+'\');document.getElementById(\'colorPicker_'+s.f+'\').value=\''+c+'\'" title="'+n+'"></div>'});
       html+='</div>';
       html+='</div>';
-      html+='<div class="editor-area" contenteditable="true" data-field="'+s.f+'" oninput="onEditorInput(this,\''+s.f+'\',\''+ch.id+'\')" onpaste="onEditorPaste(event,this,\''+ch.id+'\',\''+s.f+'\')">'+v+'</div></div>';
+      html+='<div class="editor-area" contenteditable="true" data-field="'+s.f+'" data-chid="'+ch.id+'" oninput="onEditorInput(this,\''+s.f+'\',\''+ch.id+'\')" onpaste="onEditorPaste(event,this,\''+ch.id+'\',\''+s.f+'\')" onblur="saveSelection()">'+v+'</div></div>';
       if(s.st&&ch.keywords)html+='<div class="tag-row">'+ch.keywords.map(k=>'<span class="kw" onclick="insTagToEditor(\''+ch.id+'\',\''+s.f+'\',\''+k.replace(/'/g,'\\\'')+'\')">'+k+'</span>').join('')+'</div>'
     } else {
       html+='<div class="readonly-render">'+(v||'')+'</div>';
@@ -602,13 +619,29 @@ function renderContent(ch){
 }
 
 
+// 保存/恢复编辑器选区
+function saveSelection(){const s=window.getSelection();if(s.rangeCount>0)savedSelection=s.getRangeAt(0)};
+function restoreSelection(){if(savedSelection){const s=window.getSelection();s.removeAllRanges();s.addRange(savedSelection);savedSelection=null}};
+
 // 富文本编辑器相关
 function autoSaveCh(id,f,val){if(!chapterData[id])chapterData[id]={};chapterData[id][f]=val;autoSave()}
 function onEditorInput(el,f,id){autoSaveCh(id,f,el.innerHTML)}
 function execCmd(cmd,btn){document.execCommand(cmd,false,null);if(btn)setTimeout(()=>btn.classList.toggle('active',document.queryCommandState(cmd)),10)}
 function execCmdVal(cmd,val,btn){document.execCommand(cmd,false,val)}
-function doFontSize(size,f){const el=document.querySelector('.editor-area[data-field="'+f+'"]');if(!el)return;el.focus();document.execCommand('fontSize',false,size)}
-function doForeColor(color,f){const el=document.querySelector('.editor-area[data-field="'+f+'"]');if(!el)return;el.focus();document.execCommand('foreColor',false,color)}
+function doFontSize(size,f){
+  const el=document.querySelector('.editor-area[data-field="'+f+'"]');
+  if(!el)return;
+  restoreSelection();
+  el.focus();
+  document.execCommand('fontSize',false,size);
+}
+function doForeColor(color,f){
+  const el=document.querySelector('.editor-area[data-field="'+f+'"]');
+  if(!el)return;
+  restoreSelection();
+  el.focus();
+  document.execCommand('foreColor',false,color);
+}
 function insertLink(f){const url=prompt('输入链接地址：','https://');if(!url)return;document.execCommand('createLink',false,url)}
 function insertImgToEditor(chId,f,btn){
   const input=document.createElement('input');input.type='file';input.accept='image/*';
@@ -723,6 +756,7 @@ function delFooterImg(chId,idx){
 
 // ====== GitHub 云端同步 ======
 let githubToken='';
+let savedSelection=null; // 保存编辑器选区
 function setGithubToken(){
   const t=prompt('输入GitHub Personal Access Token（repo权限）：',(githubToken||''));
   if(t!==null){githubToken=t;localStorage.setItem('skb_github_token',t);showToast('Token已保存')}
