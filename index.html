@@ -509,7 +509,7 @@ function renderNav(){
     data.chapters.forEach(ch=>{
       const item=document.createElement('div');item.className='chapter-item '+gc.chCls;item.dataset.id=ch.id;item.dataset.grade=grade;item.dataset.name=ch.name;
       let filled=false;const d=chapterData[ch.id];if(d){const tx=Object.values(d).filter(Boolean).join('');if(tx.length>10)filled=true}
-      const dotColor=elDots[ch.el]||'#c9a96e';
+      const dotColor=gc.acc;
       item.innerHTML='<span class="el-dot" style="background:'+dotColor+'"></span><span class="ch-num">'+ch.num+'</span>'+ch.name+(filled?'<span class="badge" style="background:'+gc.acc+'">✦</span>':'');
       item.onclick=()=>selAndClose(ch,item);cd.appendChild(item)});
     g.appendChild(t);g.appendChild(cd);nav.appendChild(g)}}
