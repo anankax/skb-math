@@ -14,11 +14,10 @@
   --gold-border:rgba(180,150,80,0.25);--text-pri:#4a3c2d;--text-sec:#7a6b58;--text-dim:#a09585;--text-head:#3d3020;
   --shadow-sm:0 2px 8px rgba(120,90,40,0.06);--shadow-md:0 4px 20px rgba(120,90,40,0.10);
   --radius:12px;--side-w:280px;
-  --c1:#4a8fc2;--c1-bg:rgba(74,143,194,0.06);--c1-glow:rgba(74,143,194,0.08);
-  --c2:#c9a227;--c2-bg:rgba(201,162,39,0.06);--c2-glow:rgba(201,162,39,0.08);
-  --c3:#9b6fc9;--c3-bg:rgba(155,111,201,0.06);--c3-glow:rgba(155,111,201,0.08);
-  --c4:#5cb85c;--c4-bg:rgba(92,184,92,0.05);--c4-glow:rgba(92,184,92,0.07);
-  --c5:#5ba8c0;--c5-bg:rgba(91,168,192,0.06);--c5-glow:rgba(91,168,192,0.08);
+  /* 三色方案：七年级蓝、八年级绿、九年级紫 */
+  --c7:#4a8fc2;--c7-bg:rgba(74,143,194,0.06);--c7-glow:rgba(74,143,194,0.08);
+  --c8:#5cb85c;--c8-bg:rgba(92,184,92,0.05);--c8-glow:rgba(92,184,92,0.07);
+  --c9:#9b6fc9;--c9-bg:rgba(155,111,201,0.06);--c9-glow:rgba(155,111,201,0.08);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{
@@ -103,13 +102,15 @@ body{
 .chapter-item .el-dot{width:7px;height:7px;border-radius:2px;transform:rotate(45deg);flex-shrink:0;margin-right:2px}
 .chapter-item.active{font-weight:600}
 
-.grade-title.g-1{color:var(--c1)}.grade-title.g-2{color:var(--c2)}.grade-title.g-3{color:var(--c3)}.grade-title.g-4{color:var(--c4)}.grade-title.g-5{color:var(--c5)}
+.grade-title.g-7{color:var(--c7)}.grade-title.g-8{color:var(--c8)}.grade-title.g-9{color:var(--c9)}
 
-.ch-item-1.active{background:linear-gradient(90deg,var(--c1-bg),transparent);color:var(--c1);border-left-color:var(--c1)}
-.ch-item-2.active{background:linear-gradient(90deg,var(--c2-bg),transparent);color:var(--c2);border-left-color:var(--c2)}
-.ch-item-3.active{background:linear-gradient(90deg,var(--c3-bg),transparent);color:var(--c3);border-left-color:var(--c3)}
-.ch-item-4.active{background:linear-gradient(90deg,var(--c4-bg),transparent);color:var(--c4);border-left-color:var(--c4)}
-.ch-item-5.active{background:linear-gradient(90deg,var(--c5-bg),transparent);color:var(--c5);border-left-color:var(--c5)}
+.ch-item-7.active{background:linear-gradient(90deg,var(--c7-bg),transparent);color:var(--c7);border-left-color:var(--c7)}
+.ch-item-8.active{background:linear-gradient(90deg,var(--c8-bg),transparent);color:var(--c8);border-left-color:var(--c8)}
+.ch-item-9.active{background:linear-gradient(90deg,var(--c9-bg),transparent);color:var(--c9);border-left-color:var(--c9)}
+/* 标签配色 */
+.tc-7{color:var(--c7);border-color:rgba(74,143,194,0.25)}
+.tc-8{color:var(--c8);border-color:rgba(92,184,92,0.25)}
+.tc-9{color:var(--c9);border-color:rgba(155,111,201,0.25)}
 
 .sidebar-close-btn{position:absolute;top:10px;right:10px;width:32px;height:32px;border:1px solid var(--gold-border);border-radius:50%;background:var(--card-bg);cursor:pointer;font-size:14px;color:var(--text-dim);line-height:30px;text-align:center;z-index:5;display:none}
 
@@ -277,6 +278,28 @@ body{
   .home-content .sub{font-size:12px;margin-bottom:20px}
   .home-content .enter-btn{padding:10px 28px;font-size:13px;letter-spacing:3px}
 }
+
+  /* 工具栏下拉和颜色按钮 */
+  .editor-toolbar .tb-select{
+    padding:3px 4px;border:1.5px solid var(--gold-border);border-radius:4px;
+    background:var(--card-bg);color:var(--text-pri);font-size:11px;
+    font-family:inherit;cursor:pointer;max-width:68px;height:28px;
+  }
+  .editor-toolbar .tb-color{
+    width:24px;height:24px;padding:0;border:1.5px solid var(--gold-border);
+    border-radius:4px;cursor:pointer;background:none;vertical-align:middle;
+  }
+  .editor-toolbar .tb-swatch{
+    width:18px;height:18px;border:1.5px solid var(--gold-border);
+    border-radius:3px;cursor:pointer;padding:0;margin:0 1px;
+    vertical-align:middle;transition:.15s;
+  }
+  .editor-toolbar .tb-swatch:hover{transform:scale(1.25);border-color:var(--gold)}
+  .editor-toolbar select option{font-size:12px}
+  /* 首页返回按钮优化 */
+  .home-content .enter-btn{font-family:'Ma Shan Zheng','ZCOOL XiaoWei',serif !important}
+  /* 搜索结果高亮 */
+  .search-match{background:rgba(201,162,39,0.25);border-radius:2px;padding:0 2px}
 </style>
 </head>
 <body>
@@ -333,6 +356,7 @@ body{
       <button onclick="toggleEditMode()" id="btnEditToggle">开启编辑</button>
       <button onclick="saveData()" id="btnSave" style="display:none">保存</button>
       <button onclick="goHome()" class="btn-gold" id="btnHome" title="返回首页">🏠 首页</button>
+<button onclick="loadFromCloud()" title="从云端加载">☁ 拉取</button><button onclick="saveToCloud()" title="保存到云端">☁ 推送</button><button onclick="setGithubToken()" title="设置GitHub Token">⚙ Token</button>
     </div>
     <div class="content" id="mainContent">
       <div class="empty-state">
@@ -367,13 +391,13 @@ const IMG_DATA = {};
 <script>
 const EP='anan001014';
 
-// 五学段配色与背景图
+// 三学段配色：七年级蓝、八年级绿、九年级紫
 const gColors={
-  '七上':{idx:1,chCls:'ch-item-1',acc:'var(--c1)',tc:'tc-1',bgRole:'bg_qi_shang'},
-  '七下':{idx:2,chCls:'ch-item-2',acc:'var(--c2)',tc:'tc-2',bgRole:'bg_qi_xia'},
-  '八上':{idx:3,chCls:'ch-item-3',acc:'var(--c3)',tc:'tc-3',bgRole:'bg_ba_shang'},
-  '八下':{idx:4,chCls:'ch-item-4',acc:'var(--c4)',tc:'tc-4',bgRole:'bg_ba_xia'},
-  '九年级':{idx:5,chCls:'ch-item-5',acc:'var(--c5)',tc:'tc-5',bgRole:'bg_jiu'}
+  '七上':{idx:7,chCls:'ch-item-7',acc:'var(--c7)',tc:'tc-7',bgRole:'bg_qi_shang'},
+  '七下':{idx:7,chCls:'ch-item-7',acc:'var(--c7)',tc:'tc-7',bgRole:'bg_qi_xia'},
+  '八上':{idx:8,chCls:'ch-item-8',acc:'var(--c8)',tc:'tc-8',bgRole:'bg_ba_shang'},
+  '八下':{idx:8,chCls:'ch-item-8',acc:'var(--c8)',tc:'tc-8',bgRole:'bg_ba_xia'},
+  '九年级':{idx:9,chCls:'ch-item-9',acc:'var(--c9)',tc:'tc-9',bgRole:'bg_jiu'}
 };
 const elDots={'风':'#5b9bd5','岩':'#c9a96e','雷':'#9b7fd4','草':'#6daa6f','水':'#5babc4','火':'#e07b54','冰':'#7ec8e3'};
 
@@ -534,6 +558,32 @@ function renderContent(ch){
       // 富文本编辑器
       html+='<div class="editor-wrap"><div class="editor-toolbar" data-field="'+s.f+'">';
       html+='<span class="tb-label">格式</span>';
+      html+='<button onclick="execCmd('bold',this)" title="粗体 B"><b>B</b></button>';
+      html+='<button onclick="execCmd('italic',this)" title="斜体 I"><i>I</i></button>';
+      html+='<button onclick="execCmd('underline',this)" title="下划线 U"><u>U</u></button>';
+      html+='<span class="tb-sep"></span>';
+      html+='<button onclick="execCmd('insertUnorderedList',this)" title="无序列表">• 列表</button>';
+      html+='<button onclick="execCmd('insertOrderedList',this)" title="有序列表">1. 列表</button>';
+      html+='<span class="tb-sep"></span>';
+      html+='<span class="tb-label">字号</span><select class="tb-select" onchange="doFontSize(this,this.value)"><option value="">字号</option><option value="12">12</option><option value="14">14</option><option value="16" selected>16</option><option value="18">18</option><option value="20">20</option><option value="24">24</option><option value="28">28</option><option value="32">32</option></select>';
+      html+='<span class="tb-sep"></span>';
+      html+='<span class="tb-label">颜色</span>';
+      html+='<input type="color" class="tb-color" value="#4a3c2d" onchange="doForeColor(this.value)">';
+      html+='<button class="tb-swatch" style="background:#4a3c2d" onclick="doForeColor('#4a3c2d')" title="默认"></button>';
+      html+='<button class="tb-swatch" style="background:#c9a227" onclick="doForeColor('#c9a227')" title="金色"></button>';
+      html+='<button class="tb-swatch" style="background:#c0392b" onclick="doForeColor('#c0392b')" title="红色"></button>';
+      html+='<button class="tb-swatch" style="background:#2980b9" onclick="doForeColor('#2980b9')" title="蓝色"></button>';
+      html+='<button class="tb-swatch" style="background:#27ae60" onclick="doForeColor('#27ae60')" title="绿色"></button>';
+      html+='<span class="tb-sep"></span>';
+      html+='<button onclick="insertMathDialog(''+s.f+'')" title="LaTeX 公式">∑</button>';
+      html+='<span class="tb-sep"></span>';
+      html+='<button onclick="insertLinkDialog(''+s.f+'')" title="插入链接">🔗</button>';
+      html+='<button onclick="insertImgDialog(''+ch.id+'',''+s.f+'')" title="插入图片">🏞</button>';
+      html+='<span class="tb-sep"></span>';
+      html+='<span class="tb-label">块</span>';
+      html+='<button onclick="execCmdVal('formatBlock','h3')" title="标题">H</button>';
+      html+='<button onclick="execCmdVal('formatBlock','p')" title="正文">P</button>';
+      html+='</div>'
       html+='<button onclick="execCmd(\'bold\',this)" title="粗体(Ctrl+B)"><b>B</b></button>';
       html+='<button onclick="execCmd(\'italic\',this)" title="斜体(Ctrl+I)"><i>I</i></button>';
       html+='<button onclick="execCmd(\'underline\',this)" title="下划线(Ctrl+U)"><u>U</u></button>';
@@ -584,6 +634,150 @@ function renderContent(ch){
 
 
 // 富文本编辑器相关
+
+// ========== 字号设置 ==========
+function doFontSize(sel, size){
+  if(!size) return;
+  document.execCommand('fontSize', false, '7');
+  // fontSize 1-7 不够用，用 CSS 覆盖
+  setTimeout(()=>{
+    const el = document.querySelector('.editor-area:focus') || (currentChapter ? document.querySelector('.editor-area') : null);
+    if(!el) return;
+    el.querySelectorAll('font[size="7"]').forEach(f=>{
+      f.removeAttribute('size');
+      f.style.fontSize = size + 'px';
+      f.style.lineHeight = '1.7';
+    });
+  }, 10);
+}
+// ========== 文字颜色 ==========
+function doForeColor(color){
+  document.execCommand('foreColor', false, color);
+}
+// ========== 公式插入 ==========
+function insertMathDialog(f){
+  const code = prompt('输入 LaTeX 公式（无需 $ 符号）：\n例：\\frac{1}{2} 或 x^2+y^2=z^2', '');
+  if(!code) return;
+  const el = document.querySelector('.editor-area[data-field="'+f+'"]');
+  if(!el) return;
+  el.focus();
+  document.execCommand('insertText', false, '\\(' + code + '\\)');
+  if(window.MathJax) setTimeout(()=>MathJax.typesetPromise([el]), 200);
+  if(currentChapter) onEditorInput(el, f, currentChapter.id);
+}
+// ========== 链接对话框 ==========
+function insertLinkDialog(f){
+  const url = prompt('输入链接地址：', 'https://');
+  if(!url || url=='https://') return;
+  const el = document.querySelector('.editor-area[data-field="'+f+'"]');
+  if(!el) return;
+  el.focus();
+  document.execCommand('createLink', false, url);
+}
+// ========== 图片插入对话框 ==========
+function insertImgDialog(chId, f){
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = 'image/*';
+  input.onchange = function(){
+    const file = this.files[0]; if(!file) return;
+    compressImgToEditor(file, chId, f);
+  };
+  input.click();
+}
+// ========== GitHub API 云端同步 ==========
+const GITHUB_REPO = 'anankax/skb-math';
+const DATA_FILE  = 'data.json';
+
+let githubToken = localStorage.getItem('skb_gh_token') || '';
+
+function setGithubToken(){
+  const t = prompt('输入 GitHub Personal Access Token：\n（需要在 GitHub → Settings → Developer settings → Personal access tokens 生成，勾选 repo 权限）', githubToken);
+  if(!t) return;
+  githubToken = t.trim();
+  localStorage.setItem('skb_gh_token', githubToken);
+  showToast('Token 已保存');
+}
+
+async function githubApi(path, method='GET', body=null){
+  const url = 'https://api.github.com/repos/'+GITHUB_REPO+'/contents/'+path;
+  const opt = {
+    method: method,
+    headers: {
+      'Authorization': 'token '+githubToken,
+      'Accept': 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json',
+    },
+  };
+  if(body) opt.body = JSON.stringify(body);
+  const r = await fetch(url, opt);
+  if(!r.ok) throw new Error('GitHub API '+r.status+' '+await r.text());
+  return r.json();
+}
+
+async function loadFromCloud(){
+  if(!githubToken){showToast('请先设置 GitHub Token'); return}
+  try {
+    showToast('正在从云端加载...');
+    const data = await githubApi(DATA_FILE);
+    const content = atob(data.content.replace(/\n/g, ''));
+    chapterData = JSON.parse(content);
+    localStorage.setItem('skb7_data', JSON.stringify(chapterData));
+    updateStats();
+    if(currentChapter) renderContent(currentChapter);
+    showToast('云端数据已加载');
+  } catch(e){
+    console.error('加载云端数据失败：', e);
+    showToast('加载失败：'+e.message);
+  }
+}
+
+async function saveToCloud(){
+  if(!githubToken){showToast('请先设置 GitHub Token'); return}
+  try {
+    showToast('正在保存到云端...');
+    // 先获取文件的 sha（如果存在）
+    let sha = '';
+    try {
+      const existing = await githubApi(DATA_FILE);
+      sha = existing.sha;
+    } catch(e){ /* 文件不存在，sha 为空 */ }
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(chapterData, null, 2))));
+    const body = {
+      message: '更新备课数据 ' + new Date().toLocaleString('zh-CN'),
+      content: content,
+      branch: 'main',
+    };
+    if(sha) body.sha = sha;
+    await githubApi(DATA_FILE, 'PUT', body);
+    showToast('已保存到云端 ✓');
+  } catch(e){
+    console.error('保存到云端失败：', e);
+    showToast('保存失败：'+e.message);
+  }
+}
+
+// ========== 搜索增强（搜索内容） ==========
+function filterChapters(){
+  const q = document.getElementById('searchBox').value.toLowerCase().trim();
+  document.querySelectorAll('.chapter-item').forEach(it=>{
+    if(!q){it.style.display=''; return}
+    const name = (it.dataset.name||'').toLowerCase();
+    const grade = (it.dataset.grade||'').toLowerCase();
+    // 也搜索内容
+    const chId = it.dataset.id;
+    let contentMatch = false;
+    if(chapterData[chId]){
+      const d = chapterData[chId];
+      const allText = Object.values(d).filter(Boolean).join(' ').toLowerCase();
+      contentMatch = allText.includes(q);
+    }
+    const match = name.includes(q) || grade.includes(q) || contentMatch;
+    it.style.display = match ? '' : 'none';
+  });
+}
+
+// ==========
+
 function onEditorInput(el,f,id){autoSaveCh(id,f,el.innerHTML)}
 function execCmd(cmd,btn){document.execCommand(cmd,false,null);if(btn)setTimeout(()=>btn.classList.toggle('active',document.queryCommandState(cmd)),10)}
 function execCmdVal(cmd,val,btn){document.execCommand(cmd,false,val)}
