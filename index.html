@@ -603,6 +603,7 @@ function renderContent(ch){
 
 
 // 富文本编辑器相关
+function autoSaveCh(id,f,val){if(!chapterData[id])chapterData[id]={};chapterData[id][f]=val;autoSave()}
 function onEditorInput(el,f,id){autoSaveCh(id,f,el.innerHTML)}
 function execCmd(cmd,btn){document.execCommand(cmd,false,null);if(btn)setTimeout(()=>btn.classList.toggle('active',document.queryCommandState(cmd)),10)}
 function execCmdVal(cmd,val,btn){document.execCommand(cmd,false,val)}
