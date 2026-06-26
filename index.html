@@ -448,7 +448,7 @@ let isEditMode=false,currentChapter=null,chapterData={};
 function loadData(){
   const s=localStorage.getItem('skb7_data');if(s){try{chapterData=JSON.parse(s)}catch{chapterData={}}}
   updateStats()}
-function saveData(){localStorage.setItem('skb7_data',JSON.stringify(chapterData));updateStats();showToast('已保存')}
+function saveData(){localStorage.setItem('skb7_data',JSON.stringify(chapterData));updateStats();showToast('已保存');if(githubToken)saveToCloud(true)}
 let at;function autoSave(){clearTimeout(at);at=setTimeout(()=>{localStorage.setItem('skb7_data',JSON.stringify(chapterData));updateStats()},600)}function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000)}
 function updateStats(){
   let f=0,w=0;
@@ -729,8 +729,8 @@ function setGithubToken(){
   if(t!==null){githubToken=t;localStorage.setItem('skb_github_token',t);showToast('Token已保存')}
 }
 function loadGithubToken(){githubToken=localStorage.getItem('skb_github_token')||''}
-function saveToCloud(){
-  if(!githubToken){setGithubToken();if(!githubToken)return}
+function saveToCloud(silent){
+  if(!githubToken){if(!silent)setGithubToken();if(!githubToken)return}
   const data=JSON.stringify(chapterData,null,2);
   const content=btoa(unescape(encodeURIComponent(data)));
   const sha=window._cloudSha||'';
@@ -738,25 +738,32 @@ function saveToCloud(){
   if(sha)body.sha=sha;
   fetch('https://api.github.com/repos/anankax/skb-math/contents/data.json',{method:'PUT',headers:{Authorization:'token '+githubToken,'Accept':'application/vnd.github.v3+json'},body:JSON.stringify(body)})
     .then(r=>{if(!r.ok)return r.json().then(e=>{throw new Error(e.message||'保存失败')});return r.json()})
-    .then(j=>{window._cloudSha=j.sha;showToast('✅ 已推送到云端')})
-    .catch(e=>{showToast('❌ 推送失败: '+e.message)});
+    .then(j=>{window._cloudSha=j.sha;if(!silent)showToast('✅ 已推送到云端')})
+    .catch(e=>{if(!silent)showToast('❌ 推送失败: '+e.message)});
 }
-function loadFromCloud(){
-  if(!githubToken){setGithubToken();if(!githubToken)return}
-  showToast('⏳ 正在拉取...');
-  fetch('https://api.github.com/repos/anankax/skb-math/contents/data.json',{headers:{Authorization:'token '+githubToken,'Accept':'application/vnd.github.v3+json'}})
-    .then(r=>{if(r.status===404){showToast('云端暂无数据');return null}if(!r.ok)return r.json().then(e=>{throw new Error(e.message||'拉取失败')});return r.json()})
-    .then(j=>{
-      if(!j)return;
-      window._cloudSha=j.sha;
-      const data=decodeURIComponent(escape(atob(j.content)));
-      chapterData=JSON.parse(data);
-      localStorage.setItem('skb7_data',data);
-      updateStats();
-      if(currentChapter)renderContent(currentChapter);
-      showToast('✅ 已从云端拉取');
+function loadFromCloud(silent){
+  if(!silent) showToast('⏳ 正在拉取...');
+  const headers = githubToken
+    ? {'Authorization':'token '+githubToken,'Accept':'application/vnd.github.v3+json'}
+    : {'Accept':'application/vnd.github.v3+json'};
+  fetch('https://api.github.com/repos/anankax/skb-math/contents/data.json', {headers})
+    .then(r=>{
+      if(r.status===404){if(!silent) showToast('云端暂无数据');return null}
+      if(!r.ok) throw new Error('拉取失败')
+      return r.json()
     })
-    .catch(e=>{showToast('❌ 拉取失败: '+e.message)});
+    .then(j=>{
+      if(!j) return;
+      window._cloudSha = j.sha;
+      const data = decodeURIComponent(escape(atob(j.content)));
+      chapterData = JSON.parse(data);
+      localStorage.setItem('skb7_data', JSON.stringify(chapterData));
+      updateStats();
+      if(currentChapter) renderContent(currentChapter);
+      if(!silent) showToast('✅ 已从云端拉取');
+      else console.log('[sync] 云端数据已同步');
+    })
+    .catch(e=>{if(!silent) showToast('❌ 拉取失败: '+e.message)});
 }
 
 // ====== 加载图片数据并初始化 ======
@@ -805,6 +812,7 @@ function initHomePage(){
 initHomePage();
 loadData();
 renderNav();
+loadFromCloud(true);
 
 document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();saveData()}});
 window.addEventListener('beforeunload',()=>{
