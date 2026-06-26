@@ -228,13 +228,6 @@ body{
 .editor-area ul,.editor-area ol{margin:6px 0;padding-left:20px}
 .editor-area a{color:var(--c1);text-decoration:underline}
 .editor-area code{background:rgba(200,160,60,0.08);padding:1px 5px;border-radius:3px;font-size:12px;color:var(--gold-dark)}
-/* 字号/颜色控件 */
-.editor-toolbar select{padding:3px 6px;border:1.5px solid var(--gold-border);border-radius:5px;background:var(--card-bg);color:var(--text-sec);font-size:11.5px;font-family:inherit;cursor:pointer;outline:none}
-.editor-toolbar select:focus{border-color:var(--gold)}
-.editor-toolbar input[type="color"]{width:26px;height:26px;border:1.5px solid var(--gold-border);border-radius:5px;padding:1px;cursor:pointer;background:none;vertical-align:middle}
-.editor-toolbar .color-swatches{display:flex;gap:3px;align-items:center}
-.editor-toolbar .color-swatch{width:20px;height:20px;border-radius:4px;border:1.5px solid rgba(0,0,0,.15);cursor:pointer;transition:.2s;flex-shrink:0}
-.editor-toolbar .color-swatch:hover{transform:scale(1.15);box-shadow:0 2px 6px rgba(0,0,0,.2)}
 /* ====== MOBILE ====== */
 @media(max-width:768px){
   .sidebar{position:fixed;left:-100%;top:0;height:100vh;z-index:100;transition:left .3s;box-shadow:4px 0 24px rgba(0,0,0,.12)}
@@ -341,9 +334,6 @@ body{
       <button onclick="toggleEditMode()" id="btnEditToggle">开启编辑</button>
       <button onclick="saveData()" id="btnSave" style="display:none">保存</button>
       <button onclick="goHome()" class="btn-gold" id="btnHome" title="返回首页">🏠 首页</button>
-      <button onclick="setGithubToken()" title="设置GitHub Token">⚙ Token</button>
-      <button onclick="loadFromCloud()" title="从云端拉取">☁ 拉取</button>
-      <button onclick="saveToCloud()" title="保存到云端">☁ 推送</button>
     </div>
     <div class="content" id="mainContent">
       <div class="empty-state">
@@ -558,16 +548,6 @@ function renderContent(ch){
       html+='<span class="tb-label">标题</span>';
       html+='<button onclick="execCmdVal(\'formatBlock\',\'h3\',this)" title="标题">H</button>';
       html+='<button onclick="execCmdVal(\'formatBlock\',\'p\',this)" title="正文">P</button>';
-      html+='<span class="tb-sep"></span>';
-      html+='<span class="tb-label">字号</span>';
-      html+='<select onchange="doFontSize(this.value,\''+s.f+'\')"><option value="">默认</option><option value="3">12px</option><option value="4">14px</option><option value="5" selected>16px</option><option value="6">20px</option><option value="7">26px</option></select>';
-      html+='<span class="tb-sep"></span>';
-      html+='<span class="tb-label">颜色</span>';
-      html+='<input type="color" id="colorPicker_'+s.f+'" value="#333333" onchange="doForeColor(this.value,\''+s.f+'\')" title="字体颜色">';
-      html+='<div class="color-swatches">';
-      const swatches=[['#4a3c2d','深棕'],['#c9a227','金'],['#e07b54','红'],['#4a8fc2','蓝'],['#5cb85c','绿'],['#9b6fc9','紫']];
-      swatches.forEach(([c,n])=>{html+='<div class="color-swatch" style="background:'+c+'" onclick="doForeColor(\''+c+'\',\''+s.f+'\');document.getElementById(\'colorPicker_'+s.f+'\').value=\''+c+'\'" title="'+n+'"></div>'});
-      html+='</div>';
       html+='</div>';
       html+='<div class="editor-area" contenteditable="true" data-field="'+s.f+'" oninput="onEditorInput(this,\''+s.f+'\',\''+ch.id+'\')" onpaste="onEditorPaste(event,this,\''+ch.id+'\',\''+s.f+'\')">'+v+'</div></div>';
       if(s.st&&ch.keywords)html+='<div class="tag-row">'+ch.keywords.map(k=>'<span class="kw" onclick="insTagToEditor(\''+ch.id+'\',\''+s.f+'\',\''+k.replace(/'/g,'\\\'')+'\')">'+k+'</span>').join('')+'</div>'
@@ -608,8 +588,6 @@ function renderContent(ch){
 function onEditorInput(el,f,id){autoSaveCh(id,f,el.innerHTML)}
 function execCmd(cmd,btn){document.execCommand(cmd,false,null);if(btn)setTimeout(()=>btn.classList.toggle('active',document.queryCommandState(cmd)),10)}
 function execCmdVal(cmd,val,btn){document.execCommand(cmd,false,val)}
-function doFontSize(size,f){const el=document.querySelector('.editor-area[data-field="'+f+'"]');if(!el)return;el.focus();document.execCommand('fontSize',false,size)}
-function doForeColor(color,f){const el=document.querySelector('.editor-area[data-field="'+f+'"]');if(!el)return;el.focus();document.execCommand('foreColor',false,color)}
 function insertLink(f){const url=prompt('输入链接地址：','https://');if(!url)return;document.execCommand('createLink',false,url)}
 function insertImgToEditor(chId,f,btn){
   const input=document.createElement('input');input.type='file';input.accept='image/*';
@@ -722,45 +700,7 @@ function delFooterImg(chId,idx){
 }
 
 
-// ====== GitHub 云端同步 ======
-let githubToken='';
-function setGithubToken(){
-  const t=prompt('输入GitHub Personal Access Token（repo权限）：',(githubToken||''));
-  if(t!==null){githubToken=t;localStorage.setItem('skb_github_token',t);showToast('Token已保存')}
-}
-function loadGithubToken(){githubToken=localStorage.getItem('skb_github_token')||''}
-function saveToCloud(){
-  if(!githubToken){setGithubToken();if(!githubToken)return}
-  const data=JSON.stringify(chapterData,null,2);
-  const content=btoa(unescape(encodeURIComponent(data)));
-  const sha=window._cloudSha||'';
-  const body={message:'auto: 备份备课数据 '+new Date().toISOString().slice(0,10)+' '+new Date().toTimeString().slice(0,5),content:content};
-  if(sha)body.sha=sha;
-  fetch('https://api.github.com/repos/anankax/skb-math/contents/data.json',{method:'PUT',headers:{Authorization:'token '+githubToken,'Accept':'application/vnd.github.v3+json'},body:JSON.stringify(body)})
-    .then(r=>{if(!r.ok)return r.json().then(e=>{throw new Error(e.message||'保存失败')});return r.json()})
-    .then(j=>{window._cloudSha=j.sha;showToast('✅ 已推送到云端')})
-    .catch(e=>{showToast('❌ 推送失败: '+e.message)});
-}
-function loadFromCloud(){
-  if(!githubToken){setGithubToken();if(!githubToken)return}
-  showToast('⏳ 正在拉取...');
-  fetch('https://api.github.com/repos/anankax/skb-math/contents/data.json',{headers:{Authorization:'token '+githubToken,'Accept':'application/vnd.github.v3+json'}})
-    .then(r=>{if(r.status===404){showToast('云端暂无数据');return null}if(!r.ok)return r.json().then(e=>{throw new Error(e.message||'拉取失败')});return r.json()})
-    .then(j=>{
-      if(!j)return;
-      window._cloudSha=j.sha;
-      const data=decodeURIComponent(escape(atob(j.content)));
-      chapterData=JSON.parse(data);
-      localStorage.setItem('skb7_data',data);
-      updateStats();
-      if(currentChapter)renderContent(currentChapter);
-      showToast('✅ 已从云端拉取');
-    })
-    .catch(e=>{showToast('❌ 拉取失败: '+e.message)});
-}
-
 // ====== 加载图片数据并初始化 ======
-loadGithubToken();
 fetchImageData();
 function fetchImageData(){
   const raw = {
