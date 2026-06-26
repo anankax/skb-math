@@ -213,6 +213,20 @@ body{
 .progress-bar .prog-track{height:7px;background:var(--ivory-dark);border-radius:4px;overflow:hidden}
 .progress-bar .prog-fill{height:100%;background:linear-gradient(90deg,var(--gold-light),var(--gold),var(--gold-light));border-radius:4px;transition:.6s ease}
 
+/* ====== 富文本编辑器 ====== */
+.editor-wrap{display:flex;flex-direction:column;gap:0}
+.editor-toolbar{display:flex;flex-wrap:wrap;gap:4px;padding:8px 10px;background:linear-gradient(180deg,rgba(245,239,222,0.5),rgba(240,232,218,0.3));border:1.5px solid var(--gold-border);border-bottom:1px solid rgba(180,150,80,0.15);border-radius:8px 8px 0 0;align-items:center}
+.editor-toolbar button{padding:4px 8px;border:1.5px solid var(--gold-border);border-radius:5px;background:var(--card-bg);color:var(--text-sec);cursor:pointer;font-size:12px;font-family:inherit;transition:.2s;line-height:1.4;white-space:nowrap}
+.editor-toolbar button:hover{border-color:var(--gold);color:var(--gold-dark);background:linear-gradient(180deg,#fffef8,#f8f3e6)}
+.editor-toolbar .tb-sep{width:1px;height:18px;background:rgba(180,150,80,0.2);margin:0 3px;flex-shrink:0}
+.editor-toolbar .tb-label{font-size:10px;color:var(--text-dim);margin-right:2px;white-space:nowrap}
+.editor-area{min-height:120px;max-height:500px;overflow-y:auto;padding:13px;font-size:13.5px;font-family:inherit;color:var(--text-pri);background:rgba(250,247,240,.7);border:1.5px solid var(--gold-border);border-top:none;border-radius:0 0 8px 8px;line-height:2;transition:.3s;white-space:pre-wrap;word-break:break-word;outline:none}
+.editor-area:focus{border-color:var(--gold);box-shadow:0 0 14px var(--gold-glow);background:rgba(255,253,248,0.85)}
+.editor-area img{max-width:100%;border-radius:6px;margin:4px 0;border:1px solid var(--gold-border)}
+.editor-area h3{margin:8px 0 4px;color:var(--text-head);font-weight:700;font-size:15px}
+.editor-area ul,.editor-area ol{margin:6px 0;padding-left:20px}
+.editor-area a{color:var(--c1);text-decoration:underline}
+.editor-area code{background:rgba(200,160,60,0.08);padding:1px 5px;border-radius:3px;font-size:12px;color:var(--gold-dark)}
 /* ====== MOBILE ====== */
 @media(max-width:768px){
   .sidebar{position:fixed;left:-100%;top:0;height:100vh;z-index:100;transition:left .3s;box-shadow:4px 0 24px rgba(0,0,0,.12)}
@@ -224,7 +238,7 @@ body{
   .header-banner .header-inner{padding-top:170px}
   .header-banner h1{font-size:36px;letter-spacing:4px}
   .content{padding:16px 14px}
-  .card-bd textarea{font-size:16px}
+  .editor-area{font-size:16px}
   .toolbar{padding:10px 14px}
   .toolbar h3{font-size:13.5px}
   .chapter-meta{padding:11px 14px;font-size:11.5px}
@@ -239,17 +253,30 @@ body{
 }
 
 /* ====== 首页 ====== */
-.home-page{position:fixed;inset:0;z-index:1000;display:flex;align-items:flex-start;justify-content:center;padding-top:12vh;transition:opacity .6s ease,visibility .6s ease}
+.home-page{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s ease,visibility .6s ease}
 .home-page.hidden{opacity:0;visibility:hidden;pointer-events:none}
 .home-bg{position:absolute;inset:0}
-.home-bg img{width:100%;height:100%;object-fit:cover;object-position:center 20%}
-.home-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.25) 0%,rgba(0,0,0,0.10) 40%,rgba(0,0,0,0.45) 100%)}
-.home-content{position:relative;z-index:1;text-align:center;color:#fff;padding:0 24px}
+.home-bg img{width:100%;height:100%;object-fit:cover;object-position:center 30%}
+.home-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.18) 0%,rgba(0,0,0,0.06) 35%,rgba(0,0,0,0.35) 100%)}
+.home-content{position:relative;z-index:1;text-align:center;color:#fff;padding:0 24px;margin-top:auto;padding-bottom:10vh}
 .home-content h1{font-family:'Ma Shan Zheng','ZCOOL XiaoWei','Noto Serif SC',serif;font-size:64px;letter-spacing:10px;font-weight:900;text-shadow:0 2px 20px rgba(0,0,0,0.5);margin-bottom:12px}
 .home-content .sub{font-size:16px;letter-spacing:4px;opacity:0.85;margin-bottom:40px}
 .home-content .enter-btn{display:inline-block;padding:14px 52px;font-size:18px;letter-spacing:6px;font-weight:700;color:#fff;background:rgba(201,162,39,0.55);border:2px solid rgba(255,255,255,0.7);border-radius:12px;cursor:pointer;transition:.35s;font-family:inherit;text-shadow:0 1px 4px rgba(0,0,0,0.3);backdrop-filter:blur(4px)}
 .home-content .enter-btn:hover{background:rgba(201,162,39,0.85);border-color:#fff;transform:translateY(-2px);box-shadow:0 6px 24px rgba(201,162,39,0.4)}
-@media(max-width:768px){.home-content h1{font-size:38px;letter-spacing:5px}.home-content .enter-btn{padding:12px 36px;font-size:15px}}
+@media(max-width:768px){
+  .home-bg img{object-position:center 20%}
+  .home-content{margin-top:0;padding-bottom:8vh;padding-top:8vh;justify-content:center}
+  .home-content h1{font-size:38px;letter-spacing:5px}
+  .home-content .sub{font-size:13px;margin-bottom:28px}
+  .home-content .enter-btn{padding:12px 36px;font-size:15px}
+}
+@media(max-width:480px){
+  .home-bg img{object-position:center 15%}
+  .home-content{padding-bottom:6vh;padding-top:5vh}
+  .home-content h1{font-size:28px;letter-spacing:3px}
+  .home-content .sub{font-size:12px;margin-bottom:20px}
+  .home-content .enter-btn{padding:10px 28px;font-size:13px;letter-spacing:3px}
+}
 </style>
 </head>
 <body>
@@ -486,17 +513,17 @@ function selectChapter(ch,item){
 function renderContent(ch){
   const d=chapterData[ch.id],main=document.getElementById('mainContent'),ed=isEditMode,grade=getGrade(ch.id),gc=gColors[grade];
   const secs=[
-    {f:'knowledge',icon:'📖',title:'知识要点',tag:'核心',ph:'本章核心知识点、公式、定理、性质……',st:true},
-    {f:'competency',icon:'🎯',title:'核心素养与教学目标',tag:'课标',ph:'六大核心素养目标、教学重难点、教学方法……'},
-    {f:'mistakes',icon:'⚠️',title:'易错清单',tag:'错因',ph:'学生常见错误类型、认知根源分析、干预策略……'},
-    {f:'kax',icon:'📋',title:'KAX真题精选',tag:'真题',ph:'从KAX工具书中摘录典型真题，标注年份、地区、来源ID……'},
-    {f:'lessonPlan',icon:'📝',title:'备课笔记',ph:'教案框架、课堂活动设计、提问链、板书设计、教学反思……'},
-    {f:'homework',icon:'📄',title:'课后作业设计',ph:'分层作业：基础巩固层 / 能力提升层 / 拓展探究层……'}
+    {f:'knowledge',icon:'\uD83D\uDCD6',title:'知识要点',tag:'核心',ph:'本章核心知识点、公式、定理、性质……',st:true},
+    {f:'competency',icon:'\uD83C\uDFAF',title:'核心素养与教学目标',tag:'课标',ph:'六大核心素养目标、教学重难点、教学方法……'},
+    {f:'mistakes',icon:'\u26A0\uFE0F',title:'易错清单',tag:'错因',ph:'学生常见错误类型、认知根源分析、干预策略……'},
+    {f:'kax',icon:'\uD83D\uDCDB',title:'KAX真题精选',tag:'真题',ph:'从KAX工具书中摘录典型真题，标注年份、地区、来源ID……'},
+    {f:'lessonPlan',icon:'\uD83D\uDCDD',title:'备课笔记',ph:'教案框架、课堂活动设计、提问链、板书设计、教学反思……'},
+    {f:'homework',icon:'\uD83D\uDCD4',title:'课后作业设计',ph:'分层作业：基础巩固层 / 能力提升层 / 拓展探究层……'}
   ];
 
   let html = '';
 
-  // 章节信息栏（去掉考频文字）
+  // 章节信息栏
   html += '<div class="chapter-meta"><div class="meta-item">教材：<b>苏科版 · '+grade+'</b></div><div class="meta-item">第 '+ch.num+' 章 · '+ch.name+'</div></div>';
 
   // 各内容卡片
@@ -504,80 +531,173 @@ function renderContent(ch){
     const v=d[s.f]||'';
     html+='<div class="section-card"><div class="card-hd" onclick="this.nextElementSibling.classList.toggle(\'collapsed\');this.querySelector(\'.hd-toggle\').classList.toggle(\'collapsed\')"><span class="hd-icon">'+s.icon+'</span><span class="hd-title">'+s.title+'</span>'+(s.tag?'<span class="hd-tag '+gc.tc+'">'+s.tag+'</span>':'')+'<span class="hd-toggle">▼</span></div><div class="card-bd">';
     if(ed){
-      html+='<textarea placeholder="'+s.ph+'" oninput="autoSaveCh(\''+ch.id+'\',\''+s.f+'\',this.value);updateMP(this,\'mp-'+s.f+'\')">'+v+'</textarea><div class="math-preview" id="mp-'+s.f+'"></div>';
-      if(s.st&&ch.keywords)html+='<div class="tag-row">'+ch.keywords.map(k=>'<span class="kw" onclick="insTag(this,\''+s.f+'\',\''+ch.id+'\')">'+k+'</span>').join('')+'</div>'
+      // 富文本编辑器
+      html+='<div class="editor-wrap"><div class="editor-toolbar" data-field="'+s.f+'">';
+      html+='<span class="tb-label">格式</span>';
+      html+='<button onclick="execCmd(\'bold\',this)" title="粗体(Ctrl+B)"><b>B</b></button>';
+      html+='<button onclick="execCmd(\'italic\',this)" title="斜体(Ctrl+I)"><i>I</i></button>';
+      html+='<button onclick="execCmd(\'underline\',this)" title="下划线(Ctrl+U)"><u>U</u></button>';
+      html+='<span class="tb-sep"></span>';
+      html+='<button onclick="execCmd(\'insertUnorderedList\',this)" title="无序列表">• 列表</button>';
+      html+='<button onclick="execCmd(\'insertOrderedList\',this)" title="有序列表">1. 列表</button>';
+      html+='<span class="tb-sep"></span>';
+      html+='<button onclick="insertLink(\''+s.f+'\')" title="插入链接">\uD83D\uDD17链接</button>';
+      html+='<button onclick="insertImgToEditor(\''+ch.id+'\',\''+s.f+'\',this)" title="插入图片">\uD83D\uDDFC\uFE0F图片</button>';
+      html+='<span class="tb-sep"></span>';
+      html+='<span class="tb-label">标题</span>';
+      html+='<button onclick="execCmdVal(\'formatBlock\',\'h3\',this)" title="标题">H</button>';
+      html+='<button onclick="execCmdVal(\'formatBlock\',\'p\',this)" title="正文">P</button>';
+      html+='</div>';
+      html+='<div class="editor-area" contenteditable="true" data-field="'+s.f+'" oninput="onEditorInput(this,\''+s.f+'\',\''+ch.id+'\')" onpaste="onEditorPaste(event,this,\''+ch.id+'\',\''+s.f+'\')">'+v+'</div></div>';
+      if(s.st&&ch.keywords)html+='<div class="tag-row">'+ch.keywords.map(k=>'<span class="kw" onclick="insTagToEditor(\''+ch.id+'\',\''+s.f+'\',\''+k.replace(/'/g,'\\\'')+'\')">'+k+'</span>').join('')+'</div>'
     } else {
       html+='<div class="readonly-render">'+(v||'')+'</div>';
     }
-    html+='</div></div>'});
+    html+='</div></div>';
+  });
 
   // 图片素材区
   const imgs=d.images||[];
-  html+='<div class="section-card"><div class="card-hd" onclick="this.nextElementSibling.classList.toggle(\'collapsed\');this.querySelector(\'.hd-toggle\').classList.toggle(\'collapsed\')"><span class="hd-icon">🎼</span><span class="hd-title">图片素材</span><span class="hd-tag '+gc.tc+'">附件</span><span class="hd-toggle">▼</span></div><div class="card-bd">';
-  if(ed)html+='<div class="upload-zone" onclick="this.querySelector(\'input\').click()"><div class="hint">点击上传图片（自动压缩存储）</div><input type="file" accept="image/*" onchange="uploadImg(\''+ch.id+'\',this)"></div>';
-  if(imgs.length>0)html+='<div class="img-row">'+imgs.map(img=>'<img class="thumb" src="'+img+'" onclick="openLb(\''+img.replace(/'/g,"\\'")+'\')">').join('')+'</div>';
+  html+='<div class="section-card"><div class="card-hd" onclick="this.nextElementSibling.classList.toggle(\'collapsed\');this.querySelector(\'.hd-toggle\').classList.toggle(\'collapsed\')"><span class="hd-icon">\uD83C\uDFBC</span><span class="hd-title">图片素材</span><span class="hd-tag '+gc.tc+'">附件</span><span class="hd-toggle">▼</span></div><div class="card-bd">';
+  if(ed)html+='<div class="upload-zone" onclick="this.querySelector(\'input\').click()"><div class="hint">点击上传图片（自动压缩）</div><input type="file" accept="image/*" onchange="uploadImg(\''+ch.id+'\',this)"></div>';
+  if(imgs.length>0)html+='<div class="img-row">'+imgs.map(img=>'<img class="thumb" src="'+img+'" onclick="openLb(\''+img.replace(/'/g,'\\\'')+'\')">').join('')+'</div>';
   html+='</div></div>';
 
-  // 章节底部图片区（用户可上传多张）
+  // 章节配图区
   const footerImgs=d.footerImgs||[];
-  html+='<div class="section-card"><div class="card-hd" onclick="this.nextElementSibling.classList.toggle(\'collapsed\');this.querySelector(\'.hd-toggle\').classList.toggle(\'collapsed\')"><span class="hd-icon">🖼️</span><span class="hd-title">章节配图</span><span class="hd-tag '+gc.tc+'">自定义</span><span class="hd-toggle">▼</span></div><div class="card-bd">';
-  if(ed)html+='<div class="upload-zone" onclick="this.querySelector(\'input\').click()"><div class="hint">点击上传图片（支持多张，不限大小）</div><input type="file" accept="image/*" onchange="uploadFooterImg(\''+ch.id+'\',this)"></div>';
+  html+='<div class="section-card"><div class="card-hd" onclick="this.nextElementSibling.classList.toggle(\'collapsed\');this.querySelector(\'.hd-toggle\').classList.toggle(\'collapsed\')"><span class="hd-icon">\uD83D\uDDFC\uFE0F</span><span class="hd-title">章节配图</span><span class="hd-tag '+gc.tc+'">自定义</span><span class="hd-toggle">▼</span></div><div class="card-bd">';
+  if(ed)html+='<div class="upload-zone" onclick="this.querySelector(\'input\').click()"><div class="hint">点击上传图片（支持多张，自动压缩）</div><input type="file" accept="image/*" onchange="uploadFooterImg(\''+ch.id+'\',this)"></div>';
   if(footerImgs.length>0){
-    html+='<div class="footer-gallery">'+footerImgs.map((img,i)=>'<div class="footer-img-wrap"><img src="'+img+'" loading="lazy" onclick="openLb(\''+img.replace(/'/g,"\\'")+'\')"><span class="footer-del'+(ed?'':' hidden')+'" onclick="delFooterImg(\''+ch.id+'\','+i+')">✕</span></div>').join('')+'</div>';
+    html+='<div class="footer-gallery">'+footerImgs.map((img,i)=>'<div class="footer-img-wrap"><img src="'+img+'" loading="lazy" onclick="openLb(\''+img.replace(/'/g,'\\\'')+'\')"><span class="footer-del" onclick="delFooterImg(\''+ch.id+'\','+i+')">\u2715</span></div>').join('')+'</div>';
   }else if(!ed){
     html+='<div style="color:var(--text-dim);font-size:12px;text-align:center;padding:12px">暂无配图</div>';
   }
   html+='</div></div>';
 
-  if(ed){
-    html+='<div class="section-card"><div class="card-hd" onclick="this.nextElementSibling.classList.toggle(\'collapsed\');this.querySelector(\'.hd-toggle\').classList.toggle(\'collapsed\')"><span class="hd-icon">∑</span><span class="hd-title">公式快速插入</span><span class="hd-tag '+gc.tc+'">LaTeX</span><span class="hd-toggle">▼</span></div><div class="card-bd"><div class="math-bar">'+
-    mb('x²','$x^2$')+mb('√x','$\\sqrt{x}$')+mb('a/b','$\\frac{a}{b}$')+mb('±','$\\pm$')+
-    mb('≠','$\\neq$')+mb('≤','$\\leq$')+mb('≥','$\\geq$')+mb('△','$\\triangle$')+
-    mb('∠','$\\angle$')+mb('∥','$\\parallel$')+mb('⊥','$\\perp$')+
-    mb('π','$\\pi$')+mb('°','$\\circ$')+
-    '<span class="sep"></span>'+
-    mb('y=kx+b','$y=kx+b$')+mb('二次函数','$y=ax^2+bx+c$')+mb('勾股','$a^2+b^2=c^2$')+
-    mb('Δ','$\Delta=b^2-4ac$')+mb('求根','$x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}$')+
-    '</div><div style="font-size:11px;color:var(--text-dim);margin-top:6px">点击按钮插入到任意编辑区 · 支持 <code style="color:'+gc.acc+'">$公式$</code> 语法</div></div></div>'
-  }
-
   main.innerHTML=html;
-  if(!ed)setTimeout(()=>{if(window.MathJax)MathJax.typesetPromise([main])},100)}
-function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
-function mb(l,c){return'<button onclick="insLT(\''+(currentChapter?currentChapter.id:'')+'\',\''+(c||'')+'\')">'+l+'</button>'}
-
-function autoSaveCh(id,f,v){if(!chapterData[id])chapterData[id]={};chapterData[id][f]=v;renderNav();autoSave()}
-function updateMP(ta,pid){const pv=document.getElementById(pid);if(!pv)return;const v=ta.value,hm=v.includes('$');if(!hm){pv.classList.remove('show');pv.innerHTML='';return}pv.classList.add('show');pv.innerHTML='<span style="color:var(--text-dim);font-size:11px">公式预览：</span>'+v;if(window.MathJax)MathJax.typesetPromise([pv])}
-function insTag(tag,f,id){const ta=document.querySelector('textarea[oninput*="'+f+'"]');if(!ta)return;const s=ta.selectionStart,e=ta.selectionEnd;ta.value=ta.value.substring(0,s)+tag.textContent+ta.value.substring(e);ta.selectionStart=ta.selectionEnd=s+tag.textContent.length;autoSaveCh(id,f,ta.value);ta.focus()}
-function insLT(id,code){const ta=document.querySelector('#mainContent textarea');if(!ta)return;const s=ta.selectionStart,e=ta.selectionEnd,ma=ta.getAttribute('oninput').match(/'(\w+)'/);if(!ma)return;const f=ma[1];ta.value=ta.value.substring(0,s)+code+ta.value.substring(e);ta.selectionStart=ta.selectionEnd=s+code.length;autoSaveCh(id,f,ta.value);ta.focus();updateMP(ta,'mp-'+f)}
-
-function uploadImg(id,input){const f=input.files[0];if(!f)return;if(f.size>2*1024*1024){showToast('图片不超过2MB');return}const r=new FileReader();r.onload=function(e){if(!chapterData[id])chapterData[id]={};if(!chapterData[id].images)chapterData[id].images=[];chapterData[id].images.push(e.target.result);autoSave();renderContent(currentChapter);showToast('已上传')};r.readAsDataURL(f);input.value=''}
-function openLb(src){document.getElementById('lightboxImg').src=src;document.getElementById('lightbox').classList.add('show')}
-
-// 返回首页
-function goHome(){
-  document.getElementById('homePage').classList.remove('hidden');
-  document.getElementById('appContainer').style.display='none';
+  if(!ed){
+    setTimeout(()=>{if(window.MathJax)MathJax.typesetPromise([main])},100)
+  }else{
+    setTimeout(bindEditorDrop,50);
+  }
 }
 
-// 章节底部图片上传（多张、不限大小）
+
+// 富文本编辑器相关
+function onEditorInput(el,f,id){autoSaveCh(id,f,el.innerHTML)}
+function execCmd(cmd,btn){document.execCommand(cmd,false,null);if(btn)setTimeout(()=>btn.classList.toggle('active',document.queryCommandState(cmd)),10)}
+function execCmdVal(cmd,val,btn){document.execCommand(cmd,false,val)}
+function insertLink(f){const url=prompt('输入链接地址：','https://');if(!url)return;document.execCommand('createLink',false,url)}
+function insertImgToEditor(chId,f,btn){
+  const input=document.createElement('input');input.type='file';input.accept='image/*';
+  input.onchange=function(){const file=this.files[0];if(!file)return;compressImgToEditor(file,chId,f)};
+  input.click();
+}
+function compressImgToEditor(file,chId,f){
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const img=new Image();
+    img.onload=function(){
+      let w=img.width,h=img.height;
+      if(w>600){h=Math.round(h*600/w);w=600}
+      const c=document.createElement('canvas');c.width=w;c.height=h;
+      c.getContext('2d').drawImage(img,0,0,w,h);
+      const dataUrl=c.toDataURL('image/jpeg',0.72);
+      const el=document.querySelector('.editor-area[data-field="'+f+'"]');
+      if(el){el.focus();document.execCommand('insertImage',false,dataUrl);onEditorInput(el,f,chId)}
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function onEditorPaste(e,el,chId,f){
+  const items=e.clipboardData.items;
+  for(let i=0;i<items.length;i++){
+    if(items[i].type.indexOf('image')!==-1){
+      e.preventDefault();
+      const file=items[i].getAsFile();
+      compressImgToEditor(file,chId,f);
+      return;
+    }
+  }
+  setTimeout(()=>onEditorInput(el,f,chId),50);
+}
+function bindEditorDrop(){
+  document.querySelectorAll('.editor-area').forEach(el=>{
+    el.addEventListener('dragover',function(e){e.preventDefault();this.style.borderColor='var(--gold)';this.style.background='rgba(200,160,60,0.08)'});
+    el.addEventListener('dragleave',function(e){e.preventDefault();this.style.borderColor='';this.style.background=''});
+    el.addEventListener('drop',function(e){
+      e.preventDefault();this.style.borderColor='';this.style.background='';
+      const files=e.dataTransfer.files;
+      if(files.length>0&&files[0].type.startsWith('image/')){
+        const f=this.dataset.field,id=currentChapter?id:'';
+        compressImgToEditor(files[0],id,f)
+      }
+    })
+  });
+}
+// 标签插入（富文本版）
+function insTagToEditor(id,f,text){
+  const el=document.querySelector('.editor-area[data-field="'+f+'"]');
+  if(!el)return;
+  el.focus();
+  document.execCommand('insertText',false,text);
+  onEditorInput(el,f,id);
+}
+// 公式插入
+function insLT(id,code){
+  const el=document.querySelector('#mainContent .editor-area');
+  if(!el)return;
+  el.focus();
+  document.execCommand('insertText',false,code);
+  const f=el.dataset.field;
+  onEditorInput(el,f,id);
+}
+// 图片压缩通用
+function compressImg(file,maxW,quality,cb){
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const img=new Image();
+    img.onload=function(){
+      let w=img.width,h=img.height;
+      if(w>maxW){h=Math.round(h*maxW/w);w=maxW}
+      const c=document.createElement('canvas');c.width=w;c.height=h;
+      c.getContext('2d').drawImage(img,0,0,w,h);
+      cb(c.toDataURL('image/jpeg',quality));
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+// 图片素材区上传（压缩）
+function uploadImg(id,input){
+  const file=input.files[0];if(!file)return;
+  compressImg(file,400,0.65,function(dataUrl){
+    if(!chapterData[id])chapterData[id]={};
+    if(!chapterData[id].images)chapterData[id].images=[];
+    chapterData[id].images.push(dataUrl);
+    autoSave();renderContent(currentChapter);showToast('已上传');
+  });
+  input.value='';
+}
+// 章节配图上传（压缩）
 function uploadFooterImg(chId,input){
-  const f=input.files[0];if(!f)return;
-  const r=new FileReader();
-  r.onload=function(e){
+  const file=input.files[0];if(!file)return;
+  compressImg(file,900,0.78,function(dataUrl){
     if(!chapterData[chId])chapterData[chId]={};
     if(!chapterData[chId].footerImgs)chapterData[chId].footerImgs=[];
-    chapterData[chId].footerImgs.push(e.target.result);
-    autoSave();renderContent(currentChapter);showToast('底部图片已添加');
-  };
-  r.readAsDataURL(f);input.value='';
+    chapterData[chId].footerImgs.push(dataUrl);
+    autoSave();renderContent(currentChapter);showToast('配图已添加');
+  });
+  input.value='';
 }
 function delFooterImg(chId,idx){
-  if(chapterData[currentChapter.id]&&chapterData[currentChapter.id].footerImgs){
-    chapterData[currentChapter.id].footerImgs.splice(idx,1);
+  if(chapterData[chId]&&chapterData[chId].footerImgs){
+    chapterData[chId].footerImgs.splice(idx,1);
     autoSave();renderContent(currentChapter);showToast('已删除');
   }
 }
+
 
 // ====== 加载图片数据并初始化 ======
 fetchImageData();
