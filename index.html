@@ -279,13 +279,7 @@ input[type="text"],input[type="password"],input[type="number"],textarea{cursor:u
 .editor-area img.img-size-m,.diary-editor-area img.img-size-m{max-width:48%!important}
 .editor-area img.img-size-l,.diary-editor-area img.img-size-l{max-width:75%!important}
 .editor-area img.img-size-f,.diary-editor-area img.img-size-f{max-width:100%!important}
-.img-toolbar{position:fixed;display:none;gap:4px;padding:5px 8px;background:linear-gradient(180deg,#fffef8,#f8f3e6);border:1.5px solid var(--gold-border);border-radius:8px;box-shadow:0 4px 16px rgba(100,80,40,.15);z-index:9999;align-items:center;flex-wrap:nowrap;font-size:11px;animation:imgToolbarIn .15s ease-out}
-.img-toolbar.show{display:flex}
-@keyframes imgToolbarIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
-.img-toolbar button{padding:4px 7px;border:1.5px solid var(--gold-border);border-radius:5px;background:var(--card-bg);color:var(--text-sec);cursor:url('images/cursor_pointer.cur'),pointer;font-size:11px;font-family:inherit;transition:.15s;white-space:nowrap;line-height:1.3}
-.img-toolbar button:hover{border-color:var(--gold);color:var(--gold-dark);background:linear-gradient(180deg,#fffef8,#f8f3e6)}
-.img-toolbar button.active{background:var(--gold);color:#fff;border-color:var(--gold)}
-.img-toolbar .tb-sep{width:1px;height:16px;background:rgba(180,150,80,0.2);margin:0 2px;flex-shrink:0}
+.editor-toolbar button[data-img-align].active,.editor-toolbar button[data-img-size].active,.diary-editor-toolbar button[data-img-align].active,.diary-editor-toolbar button[data-img-size].active{background:var(--gold);color:#fff;border-color:var(--gold)}
 /* 字号/颜色控件 */
 .editor-toolbar select{padding:3px 6px;border:1.5px solid var(--gold-border);border-radius:5px;background:var(--card-bg);color:var(--text-sec);font-size:11.5px;font-family:inherit;cursor:url('images/cursor_pointer.cur'),pointer;outline:none}
 .editor-toolbar select:focus{border-color:var(--gold)}
@@ -435,19 +429,7 @@ input[type="text"],input[type="password"],input[type="number"],textarea{cursor:u
 
 <div class="overlay-mask" id="overlayMask" onclick="closeSidebar()"></div>
 <button class="menu-btn" onclick="openSidebar()"><span></span></button>
-<div class="img-toolbar" id="imgToolbar">
-  <button onclick="setImgAlign('left')" data-align="left" title="左浮动（文字环绕右侧）">← 左浮</button>
-  <button onclick="setImgAlign('right')" data-align="right" title="右浮动（文字环绕左侧）">→ 右浮</button>
-  <button onclick="setImgAlign('center')" data-align="center" title="居中">↔ 居中</button>
-  <button onclick="setImgAlign('inline')" data-align="inline" title="内嵌（行内）">⌇ 内嵌</button>
-  <span class="tb-sep"></span>
-  <button onclick="setImgSize('s')" data-size="s" title="小(25%)">小</button>
-  <button onclick="setImgSize('m')" data-size="m" title="中(48%)">中</button>
-  <button onclick="setImgSize('l')" data-size="l" title="大(75%)">大</button>
-  <button onclick="setImgSize('f')" data-size="f" title="满(100%)">满</button>
-  <span class="tb-sep"></span>
-  <button onclick="removeImg()" title="删除图片" style="color:#c44">🗑</button>
-</div>
+
 
 <div class="app" id="appContainer" style="display:none">
   <!-- SIDEBAR -->
@@ -773,6 +755,18 @@ function renderContent(ch){
       html+='<div class="color-swatches">';
       const swatches=[['#4a3c2d','深棕'],['#c9a227','金'],['#e07b54','红'],['#4a8fc2','蓝'],['#5cb85c','绿'],['#9b6fc9','紫']];
       swatches.forEach(([c,n])=>{html+='<div class="color-swatch" style="background:'+c+'" onclick="doForeColor(\''+c+'\',\''+s.f+'\');document.getElementById(\'colorPicker_'+s.f+'\').value=\''+c+'\'" title="'+n+'"></div>'});
+      html+='</div>';
+      html+='<span class="tb-sep"></span><span class="tb-label">图片</span>';
+      html+='<button onclick="setImgAlign(\'left\')" data-img-align="left" title="图片左浮(文字右侧环绕)">←左浮</button>';
+      html+='<button onclick="setImgAlign(\'right\')" data-img-align="right" title="图片右浮(文字左侧环绕)">→右浮</button>';
+      html+='<button onclick="setImgAlign(\'center\')" data-img-align="center" title="图片居中独立行">↔居中</button>';
+      html+='<button onclick="setImgAlign(\'inline\')" data-img-align="inline" title="图片行内嵌入">⌇内嵌</button>';
+      html+='<span class="tb-sep"></span>';
+      html+='<button onclick="setImgSize(\'s\')" data-img-size="s" title="图片25%">小</button>';
+      html+='<button onclick="setImgSize(\'m\')" data-img-size="m" title="图片48%">中</button>';
+      html+='<button onclick="setImgSize(\'l\')" data-img-size="l" title="图片75%">大</button>';
+      html+='<button onclick="setImgSize(\'f\')" data-img-size="f" title="图片100%">满</button>';
+      html+='<button onclick="removeImg()" title="删除选中图片" style="color:#c44">🗑删图</button>';
       html+='</div>';
       html+='</div>';
       html+='<div class="editor-area" contenteditable="true" data-field="'+s.f+'" data-chid="'+ch.id+'" oninput="onEditorInput(this,\''+s.f+'\',\''+ch.id+'\')" onpaste="onEditorPaste(event,this,\''+ch.id+'\',\''+s.f+'\')" onblur="saveSelection()">'+v+'</div></div>';
@@ -1105,6 +1099,17 @@ function renderDiaryContent(entry){
     html+='<span class="tb-sep"></span>';
     html+='<button onclick="execCmdVal(\'formatBlock\',\'h3\',this)" title="标题">H3</button>';
     html+='<button onclick="execCmdVal(\'formatBlock\',\'p\',this)" title="正文">P</button>';
+    html+='<span class="tb-sep"></span><span class="tb-label">图片</span>';
+    html+='<button onclick="setImgAlign(\'left\')" data-img-align="left" title="图片左浮">←左浮</button>';
+    html+='<button onclick="setImgAlign(\'right\')" data-img-align="right" title="图片右浮">→右浮</button>';
+    html+='<button onclick="setImgAlign(\'center\')" data-img-align="center" title="图片居中">↔居中</button>';
+    html+='<button onclick="setImgAlign(\'inline\')" data-img-align="inline" title="图片内嵌">⌇内嵌</button>';
+    html+='<span class="tb-sep"></span>';
+    html+='<button onclick="setImgSize(\'s\')" data-img-size="s" title="小25%">小</button>';
+    html+='<button onclick="setImgSize(\'m\')" data-img-size="m" title="中48%">中</button>';
+    html+='<button onclick="setImgSize(\'l\')" data-img-size="l" title="大75%">大</button>';
+    html+='<button onclick="setImgSize(\'f\')" data-img-size="f" title="满100%">满</button>';
+    html+='<button onclick="removeImg()" title="删除选中图片" style="color:#c44">🗑删图</button>';
     html+='</div>';
     html+='<div class="diary-editor-area" contenteditable="true" id="diaryEditorArea" oninput="onDiaryEditorInput(\''+entry.id+'\')" onpaste="onDiaryPaste(event,\''+entry.id+'\')">'+(entry.content||'')+'</div>';
   }else{
@@ -1181,35 +1186,23 @@ function updateDiaryField(id,field,val){
   if(entry){entry[field]=val;saveDiaryData();renderDiaryList()}
 }
 
-// ====== 图片浮动工具栏 ======
+// ====== 图片排版（工具栏按钮方式）======
 let _selImg=null;
-function showImgToolbar(img){
-  if(!_selImg||_selImg!==img)_selImg.classList.remove('img-selected');
-  _selImg=img;
-  img.classList.add('img-selected');
-  const tb=document.getElementById('imgToolbar');
-  // 更新按钮高亮状态
-  tb.querySelectorAll('button[data-align]').forEach(b=>{
-    b.classList.toggle('active',img.classList.contains('img-float-'+b.dataset.align)||(!img.classList.contains('img-float-left')&&!img.classList.contains('img-float-right')&&!img.classList.contains('img-center')&&!img.classList.contains('img-inline')&&b.dataset.align==='center'))
+// 更新编辑器工具栏中图片按钮的高亮状态
+function updateImgBtnStates(){
+  document.querySelectorAll('[data-img-align]').forEach(b=>{
+    var cls=_selImg?_selImg.classList.contains('img-float-'+b.dataset.imgAlign):false;
+    if(_selImg&&!_selImg.classList.contains('img-float-left')&&!_selImg.classList.contains('img-float-right')&&!_selImg.classList.contains('img-center')&&!_selImg.classList.contains('img-inline')&&b.dataset.imgAlign==='center')cls=true;
+    b.classList.toggle('active',cls);
   });
-  tb.querySelectorAll('button[data-size]').forEach(b=>{
-    b.classList.toggle('active',img.classList.contains('img-size-'+b.dataset.size)||(!img.classList.contains('img-size-s')&&!img.classList.contains('img-size-m')&&!img.classList.contains('img-size-l')&&!img.classList.contains('img-size-f')&&b.dataset.size==='m'))
+  document.querySelectorAll('[data-img-size]').forEach(b=>{
+    var cls=_selImg?_selImg.classList.contains('img-size-'+b.dataset.imgSize):false;
+    if(_selImg&&!_selImg.classList.contains('img-size-s')&&!_selImg.classList.contains('img-size-m')&&!_selImg.classList.contains('img-size-l')&&!_selImg.classList.contains('img-size-f')&&b.dataset.imgSize==='m')cls=true;
+    b.classList.toggle('active',cls);
   });
-  // 定位工具栏到图片上方
-  const rect=img.getBoundingClientRect();
-  let top=rect.top-40;
-  let left=rect.left+rect.width/2-120;
-  if(top<8)top=rect.bottom+8;
-  if(left<8)left=8;
-  if(left+240>window.innerWidth)left=window.innerWidth-248;
-  tb.style.top=top+'px';
-  tb.style.left=left+'px';
-  tb.classList.add('show');
 }
-function hideImgToolbar(){
-  const tb=document.getElementById('imgToolbar');
-  tb.classList.remove('show');
-  if(_selImg){_selImg.classList.remove('img-selected');_selImg=null}
+function clearImgBtnStates(){
+  document.querySelectorAll('[data-img-align],[data-img-size]').forEach(b=>b.classList.remove('active'));
 }
 function setImgAlign(mode){
   if(!_selImg)return;
@@ -1218,51 +1211,48 @@ function setImgAlign(mode){
   else if(mode==='right')_selImg.classList.add('img-float-right');
   else if(mode==='center')_selImg.classList.add('img-center');
   else if(mode==='inline')_selImg.classList.add('img-inline');
-  // 如果是日记编辑器，自动保存
   autoSaveAfterImgEdit();
-  showImgToolbar(_selImg);
+  updateImgBtnStates();
 }
 function setImgSize(s){
   if(!_selImg)return;
   ['img-size-s','img-size-m','img-size-l','img-size-f'].forEach(c=>_selImg.classList.remove(c));
   _selImg.classList.add('img-size-'+s);
   autoSaveAfterImgEdit();
-  showImgToolbar(_selImg);
+  updateImgBtnStates();
 }
 function removeImg(){
   if(!_selImg)return;
+  var area=_selImg.closest('.editor-area'),diaryArea=_selImg.closest('.diary-editor-area');
   _selImg.remove();
-  hideImgToolbar();
-  autoSaveAfterImgEdit();
+  _selImg=null;
+  clearImgBtnStates();
+  if(area){var f=area.dataset.field,chId=area.dataset.chid;if(f&&chId)autoSaveCh(chId,f,area.innerHTML)}
+  if(diaryArea&&currentDiaryId){var entry=getDiaryById(currentDiaryId);if(entry){entry.content=diaryArea.innerHTML;autoSave()}}
 }
 function autoSaveAfterImgEdit(){
-  // 章节编辑器自动保存
   if(_selImg){
-    const area=_selImg.closest('.editor-area');
-    if(area){const f=area.dataset.field,chId=area.dataset.chid;if(f&&chId)autoSaveCh(chId,f,area.innerHTML)}
-    // 日记编辑器自动保存
-    const diaryArea=_selImg.closest('.diary-editor-area');
-    if(diaryArea&&currentDiaryId){
-      const entry=getDiaryById(currentDiaryId);
-      if(entry){entry.content=diaryArea.innerHTML;autoSave()}
-    }
+    var area=_selImg.closest('.editor-area');
+    if(area){var f=area.dataset.field,chId=area.dataset.chid;if(f&&chId)autoSaveCh(chId,f,area.innerHTML)}
+    var diaryArea=_selImg.closest('.diary-editor-area');
+    if(diaryArea&&currentDiaryId){var entry=getDiaryById(currentDiaryId);if(entry){entry.content=diaryArea.innerHTML;autoSave()}}
   }
 }
-// 禁用浏览器内置的contentEditable图片缩放把手
+// 禁用浏览器内置contentEditable图片缩放把手
 try{document.execCommand('enableObjectResizing',false,'false')}catch(e){}
-// 用mousedown capture阶段拦截图片点击，比contentEditable优先
+// 点击编辑器内图片→标记选中并高亮，点击其他→取消选中
 document.addEventListener('mousedown',function(e){
   var img=e.target;
   if(img.tagName==='IMG'&&(img.closest('.editor-area')||img.closest('.diary-editor-area'))){
-    e.preventDefault(); // 阻止浏览器选中图片/显示缩放把手
-    showImgToolbar(img);
+    if(_selImg&&_selImg!==img)_selImg.classList.remove('img-selected');
+    _selImg=img;
+    img.classList.add('img-selected');
+    updateImgBtnStates();
+  }else if(!e.target.closest('.editor-toolbar')&&!e.target.closest('.diary-editor-toolbar')){
+    if(_selImg)_selImg.classList.remove('img-selected');
+    _selImg=null;
+    clearImgBtnStates();
   }
-},true); // capture=true，在contentEditable处理之前触发
-// 点击工具栏以外的地方→隐藏工具栏
-document.addEventListener('click',function(e){
-  if(e.target.closest('#imgToolbar'))return;
-  if(e.target.tagName==='IMG'&&e.target.closest('.editor-area')||e.target.closest('.diary-editor-area'))return;
-  hideImgToolbar();
 });
 
 
