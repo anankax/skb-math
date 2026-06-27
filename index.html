@@ -519,11 +519,21 @@ function checkPwd(){if(document.getElementById('pwdInput').value===EP){isEditMod
 function getGrade(id){if(id.startsWith('7a'))return'七上';if(id.startsWith('7b'))return'七下';if(id.startsWith('8a'))return'八上';if(id.startsWith('8b'))return'八下';if(id.startsWith('9a'))return'九上';if(id.startsWith('9b'))return'九下';return'九上'}
 
 // 设置背景图
-function setGradeBg(grade){
-  const gc=gColors[grade];
+// 根据章节ID获取对应的背景图key
+function getChapterBgKey(chId){
+  const grade=getGrade(chId);
+  const gradePrefix={'七上':'7a','七下':'7b','八上':'8a','八下':'8b','九上':'9a','九下':'9b'}[grade];
+  // 算出该章节在年级内的序号(1-based)
+  const chapters=textbook[grade].chapters;
+  const idx=chapters.findIndex(c=>c.id===chId)+1;
+  return 'bg_'+gradePrefix+'_'+idx;
+}
+
+function setChapterBg(chId){
+  const bgKey=getChapterBgKey(chId);
   const bgLayer=document.getElementById('bgLayer');
-  if(IMG_DATA[gc.bgRole]){
-    bgLayer.style.backgroundImage='url('+IMG_DATA[gc.bgRole]+')';
+  if(IMG_DATA[bgKey]){
+    bgLayer.style.backgroundImage='url('+IMG_DATA[bgKey]+')';
   }
 }
 
@@ -568,7 +578,7 @@ function filterChapters(){const q=document.getElementById('searchBox').value.toL
 function selectChapter(ch,item){
   currentChapter=ch;document.querySelectorAll('.chapter-item.active').forEach(el=>el.classList.remove('active'));item.classList.add('active');
   document.getElementById('currentTitle').textContent='第'+ch.num+'章 · '+ch.name;
-  setGradeBg(getGrade(ch.id));
+  setChapterBg(ch.id);
   if(!chapterData[ch.id])chapterData[ch.id]={knowledge:'',competency:'',mistakes:'',kax:'',lessonPlan:'',homework:'',images:[]};renderContent(ch)}
 
 function renderContent(ch){
@@ -844,16 +854,12 @@ function fetchImageData(){
   const raw = {
   'header': 'images/header.jpg',
   'home_bg': 'images/home_bg.jpg',
-  'bg_qi_shang': 'images/bg_qi_shang.jpg',
-  'bg_qi_xia': 'images/bg_qi_xia.jpg',
-  'scene_3': 'images/scene_3.jpg',
-  'bg_ba_xia': 'images/bg_ba_xia.jpg',
-  'bg_jiu': 'images/bg_jiu.jpg',
   'char_1': 'images/char_1.jpg',
   'char_2': 'images/char_2.jpg',
   'char_3': 'images/char_3.jpg',
   'scene_1': 'images/scene_1.jpg',
   'scene_2': 'images/scene_2.jpg',
+  'scene_3': 'images/scene_3.jpg',
   'extra_1': 'images/extra_1.jpg',
   'extra_2': 'images/extra_2.jpg',
   'extra_3': 'images/extra_3.jpg',
@@ -861,11 +867,13 @@ function fetchImageData(){
   'extra_5': 'images/extra_5.jpg',
   'extra_6': 'images/extra_6.jpg',
   'extra_7': 'images/extra_7.jpg',
-  'bg_ba_shang': 'images/bg_ba_shang.jpg',
-  // 九上（枫丹·水）
-  'bg_jiu_9a': 'images/bg_jiu.jpg',
-  // 九下（纳塔·火）
-  'bg_jiu_9b': 'images/bg_jiu.jpg'
+  // 每章独立背景（蒙德6 + 璃月6 + 稻妻6 + 须弥5 + 枫丹5 + 纳塔4 = 32）
+  'bg_7a_1':'images/bg_7a_1.jpg','bg_7a_2':'images/bg_7a_2.jpg','bg_7a_3':'images/bg_7a_3.jpg','bg_7a_4':'images/bg_7a_4.jpg','bg_7a_5':'images/bg_7a_5.jpg','bg_7a_6':'images/bg_7a_6.jpg',
+  'bg_7b_1':'images/bg_7b_1.jpg','bg_7b_2':'images/bg_7b_2.jpg','bg_7b_3':'images/bg_7b_3.jpg','bg_7b_4':'images/bg_7b_4.jpg','bg_7b_5':'images/bg_7b_5.jpg','bg_7b_6':'images/bg_7b_6.jpg',
+  'bg_8a_1':'images/bg_8a_1.jpg','bg_8a_2':'images/bg_8a_2.jpg','bg_8a_3':'images/bg_8a_3.jpg','bg_8a_4':'images/bg_8a_4.jpg','bg_8a_5':'images/bg_8a_5.jpg','bg_8a_6':'images/bg_8a_6.jpg',
+  'bg_8b_1':'images/bg_8b_1.jpg','bg_8b_2':'images/bg_8b_2.jpg','bg_8b_3':'images/bg_8b_3.jpg','bg_8b_4':'images/bg_8b_4.jpg','bg_8b_5':'images/bg_8b_5.jpg',
+  'bg_9a_1':'images/bg_9a_1.jpg','bg_9a_2':'images/bg_9a_2.jpg','bg_9a_3':'images/bg_9a_3.jpg','bg_9a_4':'images/bg_9a_4.jpg','bg_9a_5':'images/bg_9a_5.jpg',
+  'bg_9b_1':'images/bg_9b_1.jpg','bg_9b_2':'images/bg_9b_2.jpg','bg_9b_3':'images/bg_9b_3.jpg','bg_9b_4':'images/bg_9b_4.jpg'
   };
   Object.assign(IMG_DATA, raw);
   setHeader();
