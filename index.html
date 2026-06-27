@@ -1252,50 +1252,11 @@ function autoSaveAfterImgEdit(){
 document.addEventListener('click',function(e){
   const img=e.target;
   if(img.tagName==='IMG'&&(img.closest('.editor-area')||img.closest('.diary-editor-area'))){
-    e.preventDefault();
     showImgToolbar(img);
   }else if(!e.target.closest('#imgToolbar')){
     hideImgToolbar();
   }
 });
-// 编辑器内拖拽移动图片位置（增强版：拖拽时清除浮动，放下时恢复）
-document.addEventListener('mousedown',function(e){
-  const img=e.target;
-  if(img.tagName==='IMG'&&(img.closest('.editor-area')||img.closest('.diary-editor-area'))){
-    // 记住当前浮动状态
-    const floatClass=['img-float-left','img-float-right','img-center','img-inline'].find(c=>img.classList.contains(c))||'';
-    const sizeClass=['img-size-s','img-size-m','img-size-l','img-size-f'].find(c=>img.classList.contains(c))||'';
-    img._savedFloat=floatClass;
-    img._savedSize=sizeClass;
-    // 拖拽开始时临时去掉浮动，让浏览器原生拖拽能正确移动位置
-    if(floatClass){img.classList.remove(floatClass);img.style.float='none';img.style.display='inline'}
-    const onUp=function(){
-      // 拖拽结束后恢复浮动样式
-      if(img._savedFloat){img.classList.add(img._savedFloat);img.style.float='';img.style.display=''}
-      document.removeEventListener('mouseup',onUp);
-      setTimeout(()=>autoSaveAfterImgEdit(),100);
-    };
-    document.addEventListener('mouseup',onUp);
-  }
-});
-// 触屏拖拽移动图片
-document.addEventListener('touchstart',function(e){
-  const img=e.target;
-  if(img.tagName==='IMG'&&(img.closest('.editor-area')||img.closest('.diary-editor-area'))){
-    const floatClass=['img-float-left','img-float-right','img-center','img-inline'].find(c=>img.classList.contains(c))||'';
-    const sizeClass=['img-size-s','img-size-m','img-size-l','img-size-f'].find(c=>img.classList.contains(c))||'';
-    img._savedFloat=floatClass;
-    img._savedSize=sizeClass;
-    if(floatClass){img.classList.remove(floatClass);img.style.float='none';img.style.display='inline'}
-  }
-},{passive:true});
-document.addEventListener('touchend',function(e){
-  // 查找编辑器内所有图片，恢复浮动
-  document.querySelectorAll('.editor-area img, .diary-editor-area img').forEach(img=>{
-    if(img._savedFloat){img.classList.add(img._savedFloat);img.style.float='';img.style.display=''}
-  });
-  setTimeout(()=>autoSaveAfterImgEdit(),100);
-},{passive:true});
 
 
 // ====== 加载图片数据并初始化 ======
