@@ -84,7 +84,8 @@ body{
 
 /* ====== SIDEBAR ====== */
 .sidebar{width:var(--side-w);background:linear-gradient(180deg,rgba(255,253,248,0.96),rgba(252,247,235,0.94));border-right:1px solid var(--gold-border);display:flex;flex-direction:column;flex-shrink:0;position:relative;z-index:10;box-shadow:3px 0 24px rgba(100,80,40,.06);backdrop-filter:blur(10px)}
-.sidebar-header{padding:18px 16px 14px;border-bottom:1px solid var(--gold-border);position:relative}
+.sidebar-header{padding:16px 14px 12px;border-bottom:1px solid var(--gold-border);position:relative;text-align:center}
+.sidebar-title-img{max-width:180px;width:75%;height:auto;margin:0 auto 6px;display:block;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.15))}
 .sidebar-header::after{content:'';position:absolute;bottom:0;left:16px;right:16px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-light),transparent)}
 .sidebar-header h2{font-family:'ZCOOL XiaoWei','Noto Serif SC',serif;font-size:17px;color:var(--gold-dark);font-weight:700;letter-spacing:2px}
 .sidebar-header .sub{font-size:11px;color:var(--text-dim);margin-top:3px}
@@ -415,6 +416,7 @@ input[type="text"],input[type="password"],input[type="number"],textarea{cursor:u
   <div class="sidebar" id="sidebar">
     <button class="sidebar-close-btn" onclick="closeSidebar()">✕</button>
     <div class="sidebar-header">
+      <img src="images/title_logo.png" alt="初中数学" class="sidebar-title-img">
       <h2>章节导航</h2>
       <div class="sub">新教材</div>
     </div>
