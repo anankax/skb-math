@@ -197,6 +197,14 @@ input[type="text"],input[type="password"],input[type="number"],textarea{cursor:u
 .readonly-render{font-size:13.5px;line-height:2.1;color:var(--text-pri);min-height:18px}
 .readonly-render:empty::after{content:'（暂无内容）';color:var(--text-dim);font-style:italic}
 .readonly-render img{max-width:100%;border-radius:6px;margin:8px 0;border:1px solid var(--gold-border)}
+.readonly-render img.img-float-left{float:left;margin:0 10px 6px 0;max-width:48%}
+.readonly-render img.img-float-right{float:right;margin:0 0 6px 10px;max-width:48%}
+.readonly-render img.img-center{display:block;margin:8px auto;float:none;max-width:100%}
+.readonly-render img.img-inline{display:inline;float:none;max-width:35%;vertical-align:middle;margin:0 4px}
+.readonly-render img.img-size-s{max-width:25%!important}
+.readonly-render img.img-size-m{max-width:48%!important}
+.readonly-render img.img-size-l{max-width:75%!important}
+.readonly-render img.img-size-f{max-width:100%!important}
 
 .tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .tag-row .kw{font-size:10.5px;padding:4px 12px;border-radius:14px;border:1px solid var(--gold-border);color:var(--text-sec);cursor:url('images/cursor_pointer.cur'),pointer;transition:.2s;background:rgba(250,247,240,.6);font-weight:400}
@@ -280,6 +288,10 @@ input[type="text"],input[type="password"],input[type="number"],textarea{cursor:u
 .editor-area img.img-size-l,.diary-editor-area img.img-size-l{max-width:75%!important}
 .editor-area img.img-size-f,.diary-editor-area img.img-size-f{max-width:100%!important}
 .editor-toolbar button[data-img-align].active,.editor-toolbar button[data-img-size].active,.diary-editor-toolbar button[data-img-align].active,.diary-editor-toolbar button[data-img-size].active{background:var(--gold);color:#fff;border-color:var(--gold)}
+/* 图片拖拽缩放手柄 */
+.img-resize-handle{position:absolute;bottom:0;right:0;width:16px;height:16px;background:var(--gold);border-radius:0 0 6px 0;cursor:nwse-resize;z-index:3;opacity:.8;transition:opacity .15s}
+.img-resize-handle:hover{background:var(--gold-dark);opacity:1}
+.img-selected{position:relative}
 /* 字号/颜色控件 */
 .editor-toolbar select{padding:3px 6px;border:1.5px solid var(--gold-border);border-radius:5px;background:var(--card-bg);color:var(--text-sec);font-size:11.5px;font-family:inherit;cursor:url('images/cursor_pointer.cur'),pointer;outline:none}
 .editor-toolbar select:focus{border-color:var(--gold)}
@@ -360,7 +372,7 @@ input[type="text"],input[type="password"],input[type="number"],textarea{cursor:u
 .diary-readonly{font-size:14px;line-height:2.2;color:var(--text-pri);min-height:18px;padding:18px}
 .diary-readonly img{max-width:100%;border-radius:6px;margin:6px 0;border:1px solid var(--gold-border)}
 .diary-readonly:empty::after{content:'（暂无内容）';color:var(--text-dim);font-style:italic}
-.editor-area::after,.diary-editor-area::after{content:'';display:block;clear:both}
+.editor-area::after,.diary-editor-area::after,.readonly-render::after{content:'';display:block;clear:both}
 .diary-action-bar{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
 .diary-action-bar button{padding:7px 18px;border:1.5px solid var(--gold-border);border-radius:8px;cursor:url('images/cursor_pointer.cur'),pointer;font-size:12px;font-family:inherit;transition:.25s;font-weight:500}
 .diary-action-bar button:hover{border-color:var(--gold);color:var(--gold-dark);transform:translateY(-1px)}
@@ -1186,8 +1198,52 @@ function updateDiaryField(id,field,val){
   if(entry){entry[field]=val;saveDiaryData();renderDiaryList()}
 }
 
-// ====== 图片排版（工具栏按钮方式）======
-let _selImg=null;
+// ====== 图片排版（工具栏按钮方式 + 拖拽缩放）======
+let _selImg=null,_resizeHandle=null;
+// 创建缩放手柄(全局复用一个)
+function getResizeHandle(){
+  if(!_resizeHandle){
+    _resizeHandle=document.createElement('div');
+    _resizeHandle.className='img-resize-handle';
+    document.body.appendChild(_resizeHandle);
+    // 拖拽缩放
+    _resizeHandle.addEventListener('mousedown',function(e){
+      e.stopPropagation();e.preventDefault();
+      if(!_selImg)return;
+      var startCX=e.clientX,startCY=e.clientY;
+      var startW=_selImg.offsetWidth||_selImg.naturalWidth||200;
+      var startH=_selImg.offsetHeight||_selImg.naturalHeight||150;
+      var ratio=startH/startW;
+      function onMove(ev){
+        var dx=ev.clientX-startCX,newW=Math.max(40,startW+dx);
+        _selImg.style.width=newW+'px';
+        _selImg.style.height=Math.round(newW*ratio)+'px';
+        positionResizeHandle();
+      }
+      function onUp(){
+        document.removeEventListener('mousemove',onMove);
+        document.removeEventListener('mouseup',onUp);
+        // 清除img-size-*类，改用内联width/height
+        ['img-size-s','img-size-m','img-size-l','img-size-f'].forEach(c=>_selImg.classList.remove(c));
+        autoSaveAfterImgEdit();
+        clearImgBtnStates();
+      }
+      document.addEventListener('mousemove',onMove);
+      document.addEventListener('mouseup',onUp);
+    });
+  }
+  return _resizeHandle;
+}
+function positionResizeHandle(){
+  if(!_selImg||!_resizeHandle)return;
+  var r=_selImg.getBoundingClientRect();
+  _resizeHandle.style.top=(r.top+window.scrollY+r.height-16)+'px';
+  _resizeHandle.style.left=(r.left+window.scrollX+r.width-16)+'px';
+  _resizeHandle.style.display='block';
+}
+function hideResizeHandle(){
+  if(_resizeHandle)_resizeHandle.style.display='none';
+}
 // 更新编辑器工具栏中图片按钮的高亮状态
 function updateImgBtnStates(){
   document.querySelectorAll('[data-img-align]').forEach(b=>{
@@ -1227,6 +1283,7 @@ function removeImg(){
   _selImg.remove();
   _selImg=null;
   clearImgBtnStates();
+  hideResizeHandle();
   if(area){var f=area.dataset.field,chId=area.dataset.chid;if(f&&chId)autoSaveCh(chId,f,area.innerHTML)}
   if(diaryArea&&currentDiaryId){var entry=getDiaryById(currentDiaryId);if(entry){entry.content=diaryArea.innerHTML;autoSave()}}
 }
@@ -1240,7 +1297,7 @@ function autoSaveAfterImgEdit(){
 }
 // 禁用浏览器内置contentEditable图片缩放把手
 try{document.execCommand('enableObjectResizing',false,'false')}catch(e){}
-// 点击编辑器内图片→标记选中并高亮，点击其他→取消选中
+// 点击编辑器内图片→标记选中并高亮+显示缩放手柄，点击其他→取消选中
 document.addEventListener('mousedown',function(e){
   var img=e.target;
   if(img.tagName==='IMG'&&(img.closest('.editor-area')||img.closest('.diary-editor-area'))){
@@ -1248,12 +1305,18 @@ document.addEventListener('mousedown',function(e){
     _selImg=img;
     img.classList.add('img-selected');
     updateImgBtnStates();
-  }else if(!e.target.closest('.editor-toolbar')&&!e.target.closest('.diary-editor-toolbar')){
+    getResizeHandle();
+    setTimeout(positionResizeHandle,10); // 等浏览器完成选中渲染后再定位
+  }else if(!e.target.closest('.editor-toolbar')&&!e.target.closest('.diary-editor-toolbar')&&!e.target.closest('.img-resize-handle')){
     if(_selImg)_selImg.classList.remove('img-selected');
     _selImg=null;
     clearImgBtnStates();
+    hideResizeHandle();
   }
 });
+// 滚动时重新定位缩放手柄
+window.addEventListener('scroll',function(){if(_selImg)positionResizeHandle()},true);
+window.addEventListener('resize',function(){if(_selImg)positionResizeHandle()});
 
 
 // ====== 加载图片数据并初始化 ======
