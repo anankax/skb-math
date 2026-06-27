@@ -997,7 +997,7 @@ function renderDiaryContent(entry){
   let html='';
   html+='<div class="diary-content-header">';
   html+='<h3>📔 '+entry.title+'</h3>';
-  if(ed)html+='<input type="text" class="diary-date-input" value="'+entry.date+'" placeholder="日期" onchange="updateDiaryField(\''+entry.id+'\','\'date\',this.value)">';
+  if(ed)html+="<input type=\"text\" class=\"diary-date-input\" value=\""+entry.date+"\" placeholder=\"日期\" onchange=\"updateDiaryField('"+entry.id+"','date',this.value)\">";
   else html+='<span style="color:var(--text-dim);font-size:12.5px">'+entry.date+'</span>';
   html+='</div>';
 
