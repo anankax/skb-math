@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>初中数学 · 苏科版</title>
+<title>初中数学</title>
 <script>MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},svg:{fontCache:'global'}};</script>
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 <style>
@@ -305,6 +305,52 @@ input[type="text"],input[type="password"],input[type="number"],textarea{cursor:u
   .content{padding:12px 10px}
 }
 
+/* ====== 首页标题图 ====== */
+.home-title-img{max-width:420px;width:85vw;height:auto;filter:drop-shadow(0 2px 20px rgba(0,0,0,0.4));margin-bottom:8px}
+.header-title-img{max-width:380px;width:75vw;height:auto;filter:drop-shadow(0 2px 12px rgba(0,0,0,0.15))}
+
+/* ====== 日记模块 ====== */
+.diary-section{border-top:1px solid var(--gold-border);margin-top:4px;padding-top:6px}
+.diary-title{padding:11px 16px;font-size:12.5px;font-weight:600;cursor:url('images/cursor_pointer.cur'),pointer;display:flex;align-items:center;gap:8px;border-left:3px solid #7ec8e3;background:rgba(126,200,227,0.06);color:#5ba4c4;transition:.25s;letter-spacing:1.5px}
+.diary-title:hover{background:rgba(126,200,227,0.10);color:#3d8aa8}
+.diary-title .gd-arrow{margin-left:auto;font-size:9px;transition:.3s;color:#7ec8e3}
+.diary-title .gd-arrow.open{transform:rotate(90deg)}
+.diary-body.collapsed{display:none}
+.diary-body{padding:4px 0}
+.diary-list{padding:2px 0}
+.diary-entry{padding:7px 16px 7px 32px;font-size:11.5px;cursor:url('images/cursor_pointer.cur'),pointer;display:flex;align-items:center;gap:6px;color:var(--text-sec);transition:.2s;border-left:2px solid transparent}
+.diary-entry:hover{background:rgba(126,200,227,.04);color:var(--text-head);border-left-color:#7ec8e3}
+.diary-entry .de-date{font-size:9.5px;color:var(--text-dim);min-width:72px;flex-shrink:0}
+.diary-entry .de-title{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.diary-entry.active{font-weight:600;color:#5ba4c4;border-left-color:#7ec8e3;background:rgba(126,200,227,0.06)}
+.diary-add-btn{padding:6px 16px 6px 32px;font-size:11.5px;cursor:url('images/cursor_pointer.cur'),pointer;display:flex;align-items:center;gap:6px;color:#7ec8e3;transition:.2s;font-weight:500;border-left:2px solid transparent}
+.diary-add-btn:hover{background:rgba(126,200,227,0.08);color:#5ba4c4}
+.diary-empty{text-align:center;padding:14px;color:var(--text-dim);font-size:12px}
+
+/* 日记内容区 */
+.diary-content-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.diary-content-header h3{font-family:'ZCOOL XiaoWei','Noto Serif SC',serif;font-size:15px;color:var(--text-head);letter-spacing:1px}
+.diary-content-header .diary-date-input{padding:6px 12px;border:1.5px solid var(--gold-border);border-radius:8px;font-size:12px;font-family:inherit;color:var(--text-pri);background:var(--card-bg);outline:none}
+.diary-content-header .diary-date-input:focus{border-color:var(--gold);box-shadow:0 0 10px var(--gold-glow)}
+.diary-card{background:linear-gradient(145deg,rgba(255,252,247,0.96),rgba(252,247,235,0.94));border-radius:var(--radius);border:1.5px solid var(--gold-border);box-shadow:var(--shadow-sm);overflow:hidden;backdrop-filter:blur(6px);position:relative;z-index:3}
+.diary-card::before{content:'';display:block;height:1.5px;background:linear-gradient(90deg,transparent,#7ec8e3,#5ba4c4,#7ec8e3,transparent);opacity:.7}
+.diary-editor-toolbar{display:flex;flex-wrap:wrap;gap:4px;padding:8px 10px;background:linear-gradient(180deg,rgba(245,239,222,0.5),rgba(240,232,218,0.3));border:1.5px solid var(--gold-border);border-bottom:1px solid rgba(180,150,80,0.15);border-radius:8px 8px 0 0;align-items:center}
+.diary-editor-toolbar button{padding:4px 8px;border:1.5px solid var(--gold-border);border-radius:5px;background:var(--card-bg);color:var(--text-sec);cursor:url('images/cursor_pointer.cur'),pointer;font-size:12px;font-family:inherit;transition:.2s;line-height:1.4;white-space:nowrap}
+.diary-editor-toolbar button:hover{border-color:var(--gold);color:var(--gold-dark);background:linear-gradient(180deg,#fffef8,#f8f3e6)}
+.diary-editor-toolbar .tb-sep{width:1px;height:18px;background:rgba(180,150,80,0.2);margin:0 3px;flex-shrink:0}
+.diary-editor-area{min-height:300px;max-height:none;overflow-y:auto;padding:18px;font-size:14px;font-family:inherit;color:var(--text-pri);background:rgba(250,247,240,.7);border:1.5px solid var(--gold-border);border-top:none;border-radius:0 0 8px 8px;line-height:2.1;transition:.3s;white-space:pre-wrap;word-break:break-word;outline:none}
+.diary-editor-area:focus{border-color:var(--gold);box-shadow:0 0 14px var(--gold-glow);background:rgba(255,253,248,0.85)}
+.diary-editor-area img{max-width:100%;border-radius:6px;margin:6px 0;border:1px solid var(--gold-border)}
+.diary-editor-area a{color:#5ba4c4;text-decoration:underline}
+.diary-readonly{font-size:14px;line-height:2.2;color:var(--text-pri);min-height:18px;padding:18px}
+.diary-readonly img{max-width:100%;border-radius:6px;margin:6px 0;border:1px solid var(--gold-border)}
+.diary-readonly:empty::after{content:'（暂无内容）';color:var(--text-dim);font-style:italic}
+.diary-action-bar{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.diary-action-bar button{padding:7px 18px;border:1.5px solid var(--gold-border);border-radius:8px;cursor:url('images/cursor_pointer.cur'),pointer;font-size:12px;font-family:inherit;transition:.25s;font-weight:500}
+.diary-action-bar button:hover{border-color:var(--gold);color:var(--gold-dark);transform:translateY(-1px)}
+.diary-action-bar .btn-del{color:#c44;border-color:rgba(200,68,68,0.3)}
+.diary-action-bar .btn-del:hover{border-color:#c44;background:rgba(200,68,68,0.06)}
+
 /* ====== 首页 ====== */
 .home-page{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s ease,visibility .6s ease}
 .home-page.hidden{opacity:0;visibility:hidden;pointer-events:none}
@@ -337,7 +383,7 @@ input[type="text"],input[type="password"],input[type="number"],textarea{cursor:u
 <div class="home-page" id="homePage">
   <div class="home-bg"><img id="homeBgImg" src="images/home_bg.jpg" alt=""></div>
   <div class="home-content">
-    <h1>初中数学 · 苏科版</h1>
+    <img src="images/title_logo.png" alt="初中数学" class="home-title-img">
     <div class="sub">— crafted by kax —</div>
     <button class="enter-btn" onclick="enterSite()">数学，启动！</button>
   </div>
@@ -353,7 +399,7 @@ input[type="text"],input[type="password"],input[type="number"],textarea{cursor:u
 <!-- 页眉横幅 -->
 <div class="header-banner" id="headerBanner" style="display:none">
   <div class="header-inner">
-    <h1 id="headerTitle">初中数学 · 苏科版</h1>
+    <img src="images/title_logo.png" alt="初中数学" id="headerTitleImg" class="header-title-img">
     <div class="author-mark">— crafted by <em>kax</em> —</div>
   </div>
 </div>
@@ -367,7 +413,7 @@ input[type="text"],input[type="password"],input[type="number"],textarea{cursor:u
     <button class="sidebar-close-btn" onclick="closeSidebar()">✕</button>
     <div class="sidebar-header">
       <h2>章节导航</h2>
-      <div class="sub">苏科版 · 新教材</div>
+      <div class="sub">新教材</div>
     </div>
     <div class="sidebar-stats">
       <span>已填 <b id="stats-filled">0</b>/32章</span>
@@ -375,6 +421,19 @@ input[type="text"],input[type="password"],input[type="number"],textarea{cursor:u
     </div>
     <input class="search-box" id="searchBox" placeholder="搜索章节…" oninput="filterChapters()">
     <div class="nav" id="chapterNav"></div>
+
+    <!-- 日记模块 -->
+    <div class="diary-section" id="diarySection">
+      <div class="diary-title" onclick="toggleDiaryBody()">
+        <img src="images/el_ice.webp" class="el-icon" alt=""> 日记
+        <span class="gd-arrow open" id="diaryArrow">▶</span>
+      </div>
+      <div class="diary-body" id="diaryBody">
+        <div class="diary-list" id="diaryList"></div>
+        <div class="diary-add-btn" onclick="addDiaryEntry()">＋ 写新日记</div>
+      </div>
+    </div>
+
     <div class="progress-bar">
       <div class="prog-label"><span>备课进度</span><span id="progPct">0%</span></div>
       <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
@@ -394,8 +453,8 @@ input[type="text"],input[type="password"],input[type="number"],textarea{cursor:u
     <div class="content" id="mainContent">
       <div class="empty-state">
         <div class="emblem">✦</div>
-        <h4>苏科版初中数学 · 32章</h4>
-        <p>从左侧选择章节开始浏览<br>知识要点 · 核心素养 · 易错清单 · KAX真题 · 备课笔记 · 作业设计</p>
+        <h4>初中数学 · 32章</h4>
+        <p>从左侧选择章节开始浏览<br>知识要点 · 核心素养 · 易错清单 · KAX真题 · 备课笔记 · 作业设计<br><br>💡 左下角还有「日记」功能，记录学习心得</p>
       </div>
     </div>
   </div>
@@ -867,6 +926,167 @@ function loadFromCloud(silent){
     .catch(e=>{if(!silent) showToast('❌ 拉取失败: '+e.message)});
 }
 
+// ====== 日记模块 ======
+let diaryData=[]; // [{id, date, title, content}]
+let currentDiaryId=null;
+function loadDiaryData(){
+  const s=localStorage.getItem('skb7_diary');
+  if(s){try{diaryData=JSON.parse(s)}catch{diaryData=[]}}
+}
+function saveDiaryData(){localStorage.setItem('skb7_diary',JSON.stringify(diaryData))}
+function toggleDiaryBody(){
+  const body=document.getElementById('diaryBody');
+  const arrow=document.getElementById('diaryArrow');
+  body.classList.toggle('collapsed');
+  arrow.classList.toggle('open');
+}
+function renderDiaryList(){
+  const list=document.getElementById('diaryList');
+  list.innerHTML='';
+  if(diaryData.length===0){list.innerHTML='<div class="diary-empty">还没有日记，开始写一篇吧 ✨</div>';return}
+  diaryData.forEach(d=>{
+    const el=document.createElement('div');
+    el.className='diary-entry'+(d.id===currentDiaryId?' active':'');
+    el.innerHTML='<span class="de-date">'+(d.date||'')+'</span><span class="de-title">'+(d.title||'无标题')+'</span>';
+    el.onclick=()=>selectDiaryEntry(d.id);
+    list.appendChild(el);
+  });
+}
+function genDiaryId(){return 'd_'+Date.now()+'_'+Math.random().toString(36).slice(2,7)}
+function addDiaryEntry(){
+  const now=new Date();
+  const dateStr=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+  const entry={id:genDiaryId(),date:dateStr,title:dateStr+' 日记',content:''};
+  diaryData.unshift(entry);
+  saveDiaryData();
+  renderDiaryList();
+  selectDiaryEntry(entry.id);
+  showToast('新日记已创建');
+}
+function getDiaryById(id){return diaryData.find(d=>d.id===id)}
+function selectDiaryEntry(id){
+  currentDiaryId=id;
+  document.querySelectorAll('.diary-entry').forEach(e=>e.classList.remove('active'));
+  const entry=getDiaryById(id);
+  if(!entry)return;
+  // highlight in list
+  Array.from(document.querySelectorAll('.diary-entry')).find(e=>{
+    const d=getDiaryById(id);return e.textContent.includes(d.date);
+  })?.classList.add('active');
+  renderDiaryContent(entry);
+  // update toolbar title
+  document.getElementById('currentTitle').textContent='📔 '+entry.title;
+}
+function deleteDiaryEntry(id){
+  if(!confirm('确定删除这篇日记吗？'))return;
+  diaryData=diaryData.filter(d=>d.id!==id);
+  saveDiaryData();
+  renderDiaryList();
+  if(currentDiaryId===id){currentDiaryId=null;showMainEmpty()}
+  showToast('日记已删除');
+}
+function showMainEmpty(){
+  document.getElementById('mainContent').innerHTML='<div class="empty-state"><div class="emblem">📔</div><h4>学习日记</h4><p>记录学习心得 · 整理错题反思<br>写下来，记得更牢 📝</p></div>';
+  document.getElementById('currentTitle').textContent='选择章节或日记开始';
+}
+function renderDiaryContent(entry){
+  const main=document.getElementById('mainContent'),ed=isEditMode;
+  let html='';
+  html+='<div class="diary-content-header">';
+  html+='<h3>📔 '+entry.title+'</h3>';
+  if(ed)html+='<input type="text" class="diary-date-input" value="'+entry.date+'" placeholder="日期" onchange="updateDiaryField(\''+entry.id+'\','\'date\',this.value)">';
+  else html+='<span style="color:var(--text-dim);font-size:12.5px">'+entry.date+'</span>';
+  html+='</div>';
+
+  html+='<div class="diary-card">';
+  if(ed){
+    html+='<div class="diary-editor-toolbar">';
+    html+='<button onclick="execCmd(\'bold\',this)" title="粗体"><b>B</b></button>';
+    html+='<button onclick="execCmd(\'italic\',this)" title="斜体"><i>I</i></button>';
+    html+='<button onclick="execCmd(\'underline\',this)" title="下划线"><u>U</u></button>';
+    html+='<span class="tb-sep"></span>';
+    html+='<button onclick="execCmd(\'insertUnorderedList\',this)" title="列表">• 列表</button>';
+    html+='<span class="tb-sep"></span>';
+    html+='<button onclick="insertLinkDiary()" title="链接">🔗 链接</button>';
+    html+='<button onclick="insertImgDiary(\''+entry.id+'\')" title="图片">🖼 图片</button>';
+    html+='<span class="tb-sep"></span>';
+    html+='<button onclick="execCmdVal(\'formatBlock\',\'h3\',this)" title="标题">H3</button>';
+    html+='<button onclick="execCmdVal(\'formatBlock\',\'p\',this)" title="正文">P</button>';
+    html+='</div>';
+    html+='<div class="diary-editor-area" contenteditable="true" id="diaryEditorArea" oninput="onDiaryEditorInput(\''+entry.id+'\')" onpaste="onDiaryPaste(event,\''+entry.id+'\')">'+(entry.content||'')+'</div>';
+  }else{
+    html+='<div class="diary-readonly">'+(entry.content||'')+'</div>';
+  }
+  html+='</div>';
+
+  html+='<div class="diary-action-bar">';
+  if(ed){
+    html+='<button onclick="saveCurrentDiary()" style="background:linear-gradient(135deg,#f5e6c3,#e8d4a0);color:var(--gold-dark);border-color:var(--gold);font-weight:700">💾 保存日记</button>';
+    html+='<button class="btn-del" onclick="deleteDiaryEntry(\''+entry.id+'\')">🗑 删除此篇</button>';
+  }
+  html+='<button onclick="goHome()" class="btn-gold" style="margin-left:auto">← 返回首页</button>';
+  html+='</div>';
+
+  main.innerHTML=html;
+  if(!ed)setTimeout(()=>{if(window.MathJax)MathJax.typesetPromise([main])},100);
+  else setTimeout(bindDiaryDrop,50);
+}
+function onDiaryEditorInput(id){
+  const el=document.getElementById('diaryEditorArea');
+  if(!el)return;
+  const entry=getDiaryById(id);
+  if(entry){entry.content=el.innerHTML;autoSave()}
+}
+function onDiaryPaste(e,id){
+  const items=e.clipboardData.items;
+  for(let i=0;i<items.length;i++){
+    if(items[i].type.indexOf('image')!==-1){
+      e.preventDefault();const file=items[i].getAsFile();compressImgToDiary(file,id);return}
+  }
+  setTimeout(()=>onDiaryEditorInput(id),50);
+}
+function insertLinkDiary(){const url=prompt('输入链接地址：','https://');if(url)document.execCommand('createLink',false,url)}
+function insertImgDiary(diaryId){
+  const input=document.createElement('input');input.type='file';input.accept='image/*';
+  input.onchange=function(){const f=this.files[0];if(f)compressImgToDiary(f,diaryId)};
+  input.click();
+}
+function compressImgToDiary(file,diaryId){
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const img=new Image();
+    img.onload=function(){
+      let w=img.width,h=img.height;if(w>800){h=Math.round(h*800/w);w=800}
+      const c=document.createElement('canvas');c.width=w;c.height=h;
+      c.getContext('2d').drawImage(img,0,0,w,h);
+      const dataUrl=c.toDataURL('image/jpeg',0.78);
+      const el=document.getElementById('diaryEditorArea');
+      if(el){el.focus();document.execCommand('insertImage',false,dataUrl);onDiaryEditorInput(diaryId)}
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function bindDiaryDrop(){
+  const el=document.getElementById('diaryEditorArea');if(!el)return;
+  el.addEventListener('dragover',function(e){e.preventDefault();this.style.borderColor='var(--gold)'});
+  el.addEventListener('dragleave',function(e){e.preventDefault();this.style.borderColor=''});
+  el.addEventListener('drop',function(e){
+    e.preventDefault();this.style.borderColor='';
+    const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))compressImgToDiary(f,currentDiaryId)
+  });
+}
+function saveCurrentDiary(){
+  const el=document.getElementById('diaryEditorArea');
+  if(!el||!currentDiaryId)return;
+  const entry=getDiaryById(currentDiaryId);
+  if(entry){entry.content=el.innerHTML;saveDiaryData();renderDiaryList();showToast('💾 日记已保存')}
+}
+function updateDiaryField(id,field,val){
+  const entry=getDiaryById(id);
+  if(entry){entry[field]=val;saveDiaryData();renderDiaryList()}
+}}
+
 // ====== 加载图片数据并初始化 ======
 loadGithubToken();
 fetchImageData();
@@ -934,7 +1154,9 @@ function initHomePage(){
 
 initHomePage();
 loadData();
+loadDiaryData();
 renderNav();
+renderDiaryList();
 loadFromCloud(true);
 
 document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();saveData()}});
