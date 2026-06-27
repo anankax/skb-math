@@ -267,7 +267,7 @@ input[type="text"],input[type="password"],input[type="number"],textarea{cursor:u
 .editor-toolbar button:hover{border-color:var(--gold);color:var(--gold-dark);background:linear-gradient(180deg,#fffef8,#f8f3e6)}
 .editor-toolbar .tb-sep{width:1px;height:18px;background:rgba(180,150,80,0.2);margin:0 3px;flex-shrink:0}
 .editor-toolbar .tb-label{font-size:10px;color:var(--text-dim);margin-right:2px;white-space:nowrap}
-.editor-area{min-height:120px;max-height:500px;overflow-y:auto;padding:13px;font-size:13.5px;font-family:inherit;color:var(--text-pri);background:rgba(250,247,240,.7);border:1.5px solid var(--gold-border);border-top:none;border-radius:0 0 8px 8px;line-height:2;transition:.3s;white-space:pre-wrap;word-break:break-word;outline:none}
+.editor-area{min-height:120px;padding:13px;font-size:13.5px;font-family:inherit;color:var(--text-pri);background:rgba(250,247,240,.7);border:1.5px solid var(--gold-border);border-top:none;border-radius:0 0 8px 8px;line-height:2;transition:.3s;white-space:pre-wrap;word-break:break-word;outline:none;overflow-y:visible}
 .editor-area:focus{border-color:var(--gold);box-shadow:0 0 14px var(--gold-glow);background:rgba(255,253,248,0.85)}
 .editor-area img,.diary-editor-area img,.diary-readonly img{max-width:100%;border-radius:6px;margin:6px 0;border:1px solid var(--gold-border);cursor:url('images/cursor_pointer.cur'),pointer;transition:outline .15s,box-shadow .15s}
 .editor-area img.img-float-left,.diary-editor-area img.img-float-left,.diary-readonly img.img-float-left{float:left;margin:0 10px 6px 0;max-width:48%}
@@ -359,7 +359,7 @@ input[type="text"],input[type="password"],input[type="number"],textarea{cursor:u
 .diary-editor-toolbar button{padding:4px 8px;border:1.5px solid var(--gold-border);border-radius:5px;background:var(--card-bg);color:var(--text-sec);cursor:url('images/cursor_pointer.cur'),pointer;font-size:12px;font-family:inherit;transition:.2s;line-height:1.4;white-space:nowrap}
 .diary-editor-toolbar button:hover{border-color:var(--gold);color:var(--gold-dark);background:linear-gradient(180deg,#fffef8,#f8f3e6)}
 .diary-editor-toolbar .tb-sep{width:1px;height:18px;background:rgba(180,150,80,0.2);margin:0 3px;flex-shrink:0}
-.diary-editor-area{min-height:300px;max-height:none;overflow-y:auto;padding:18px;font-size:14px;font-family:inherit;color:var(--text-pri);background:rgba(250,247,240,.7);border:1.5px solid var(--gold-border);border-top:none;border-radius:0 0 8px 8px;line-height:2.1;transition:.3s;white-space:pre-wrap;word-break:break-word;outline:none}
+.diary-editor-area{min-height:300px;padding:18px;font-size:14px;font-family:inherit;color:var(--text-pri);background:rgba(250,247,240,.7);border:1.5px solid var(--gold-border);border-top:none;border-radius:0 0 8px 8px;line-height:2.1;transition:.3s;white-space:pre-wrap;word-break:break-word;outline:none;overflow-y:visible}
 .diary-editor-area:focus{border-color:var(--gold);box-shadow:0 0 14px var(--gold-glow);background:rgba(255,253,248,0.85)}
 .diary-editor-area img{max-width:100%;border-radius:6px;margin:6px 0;border:1px solid var(--gold-border);cursor:url('images/cursor_pointer.cur'),pointer;transition:outline .15s,box-shadow .15s}
 .diary-editor-area a{color:#5ba4c4;text-decoration:underline}
@@ -1248,14 +1248,21 @@ function autoSaveAfterImgEdit(){
     }
   }
 }
-// 全局点击：点击编辑器内图片→显示工具栏，点击其他地方→隐藏
-document.addEventListener('click',function(e){
-  const img=e.target;
+// 禁用浏览器内置的contentEditable图片缩放把手
+try{document.execCommand('enableObjectResizing',false,'false')}catch(e){}
+// 用mousedown capture阶段拦截图片点击，比contentEditable优先
+document.addEventListener('mousedown',function(e){
+  var img=e.target;
   if(img.tagName==='IMG'&&(img.closest('.editor-area')||img.closest('.diary-editor-area'))){
+    e.preventDefault(); // 阻止浏览器选中图片/显示缩放把手
     showImgToolbar(img);
-  }else if(!e.target.closest('#imgToolbar')){
-    hideImgToolbar();
   }
+},true); // capture=true，在contentEditable处理之前触发
+// 点击工具栏以外的地方→隐藏工具栏
+document.addEventListener('click',function(e){
+  if(e.target.closest('#imgToolbar'))return;
+  if(e.target.tagName==='IMG'&&e.target.closest('.editor-area')||e.target.closest('.diary-editor-area'))return;
+  hideImgToolbar();
 });
 
 
