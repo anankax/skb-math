@@ -14,10 +14,13 @@
   --gold-border:rgba(180,150,80,0.25);--text-pri:#4a3c2d;--text-sec:#7a6b58;--text-dim:#a09585;--text-head:#3d3020;
   --shadow-sm:0 2px 8px rgba(120,90,40,0.06);--shadow-md:0 4px 20px rgba(120,90,40,0.10);
   --radius:12px;--side-w:280px;
-  /* 三色方案：七年级蓝、八年级绿、九年级紫 */
-  --c7:#4a8fc2;--c7-bg:rgba(74,143,194,0.06);--c7-glow:rgba(74,143,194,0.08);
-  --c8:#5cb85c;--c8-bg:rgba(92,184,92,0.05);--c8-glow:rgba(92,184,92,0.07);
-  --c9:#9b6fc9;--c9-bg:rgba(155,111,201,0.06);--c9-glow:rgba(155,111,201,0.08);
+  /* 六元素方案：风岩雷草水火 */
+  --c1:#5b9bd5;--c1-bg:rgba(91,155,213,0.06);--c1-glow:rgba(91,155,213,0.08);
+  --c2:#c9a96e;--c2-bg:rgba(201,169,110,0.06);--c2-glow:rgba(201,169,110,0.08);
+  --c3:#9b7fd4;--c3-bg:rgba(155,127,212,0.06);--c3-glow:rgba(155,127,212,0.08);
+  --c4:#6daa6f;--c4-bg:rgba(109,170,111,0.06);--c4-glow:rgba(109,170,111,0.08);
+  --c5:#5babc4;--c5-bg:rgba(91,171,196,0.06);--c5-glow:rgba(91,171,196,0.08);
+  --c6:#e07b54;--c6-bg:rgba(224,123,84,0.06);--c6-glow:rgba(224,123,84,0.08);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{
@@ -102,15 +105,39 @@ body{
 .chapter-item .el-dot{width:7px;height:7px;border-radius:2px;transform:rotate(45deg);flex-shrink:0;margin-right:2px}
 .chapter-item.active{font-weight:600}
 
-.grade-title.g-7{color:var(--c7)}.grade-title.g-8{color:var(--c8)}.grade-title.g-9{color:var(--c9)}
+/* 六年级标题色（风岩雷草水火） */
+.grade-title.g-1{border-left-color:var(--c1);background:var(--c1-bg);color:var(--c1)}
+.grade-title.g-2{border-left-color:var(--c2);background:var(--c2-bg);color:var(--c2)}
+.grade-title.g-3{border-left-color:var(--c3);background:var(--c3-bg);color:var(--c3)}
+.grade-title.g-4{border-left-color:var(--c4);background:var(--c4-bg);color:var(--c4)}
+.grade-title.g-5{border-left-color:var(--c5);background:var(--c5-bg);color:var(--c5)}
+.grade-title.g-6{border-left-color:var(--c6);background:var(--c6-bg);color:var(--c6)}
 
-.ch-item-7.active{background:linear-gradient(90deg,var(--c7-bg),transparent);color:var(--c7);border-left-color:var(--c7)}
-.ch-item-8.active{background:linear-gradient(90deg,var(--c8-bg),transparent);color:var(--c8);border-left-color:var(--c8)}
-.ch-item-9.active{background:linear-gradient(90deg,var(--c9-bg),transparent);color:var(--c9);border-left-color:var(--c9)}
-/* 标签配色 */
-.tc-7{color:var(--c7);border-color:rgba(74,143,194,0.25)}
-.tc-8{color:var(--c8);border-color:rgba(92,184,92,0.25)}
-.tc-9{color:var(--c9);border-color:rgba(155,111,201,0.25)}
+.ch-item-1.active{background:linear-gradient(90deg,var(--c1-bg),transparent);color:var(--c1);border-left-color:var(--c1)}
+.ch-item-2.active{background:linear-gradient(90deg,var(--c2-bg),transparent);color:var(--c2);border-left-color:var(--c2)}
+.ch-item-3.active{background:linear-gradient(90deg,var(--c3-bg),transparent);color:var(--c3);border-left-color:var(--c3)}
+.ch-item-4.active{background:linear-gradient(90deg,var(--c4-bg),transparent);color:var(--c4);border-left-color:var(--c4)}
+.ch-item-5.active{background:linear-gradient(90deg,var(--c5-bg),transparent);color:var(--c5);border-left-color:var(--c5)}
+.ch-item-6.active{background:linear-gradient(90deg,var(--c6-bg),transparent);color:var(--c6);border-left-color:var(--c6)}
+/* 标签配色（六元素） */
+.tc-1{color:var(--c1);border-color:rgba(91,155,213,0.25)}
+.tc-2{color:var(--c2);border-color:rgba(201,169,110,0.25)}
+.tc-3{color:var(--c3);border-color:rgba(155,127,212,0.25)}
+.tc-4{color:var(--c4);border-color:rgba(109,170,111,0.25)}
+.tc-5{color:var(--c5);border-color:rgba(91,171,196,0.25)}
+.tc-6{color:var(--c6);border-color:rgba(224,123,84,0.25)}
+
+/* 自定义光标 */
+body{cursor:url('images/cursor_default.cur'),auto}
+a,button,[onclick],.chapter-item,.grade-title,.enter-btn,.upload-zone,.thumb,.footer-img-wrap img,.editor-toolbar button,.editor-area,.color-swatch{cursor:url('images/cursor_pointer.cur'),pointer}
+
+/* 侧边栏元素图标 */
+.el-icon{width:18px;height:18px;object-fit:contain;vertical-align:middle;flex-shrink:0;border-radius:3px}
+.region-tag{font-size:9px;font-weight:600;padding:1px 7px;border-radius:8px;margin-left:auto;opacity:0.8;letter-spacing:1px;text-transform:uppercase}
+
+/* 章节meta元素徽章 */
+.el-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:600;letter-spacing:1px}
+.el-badge .el-icon-sm{width:14px;height:14px;object-fit:contain}
 
 .sidebar-close-btn{position:absolute;top:10px;right:10px;width:32px;height:32px;border:1px solid var(--gold-border);border-radius:50%;background:var(--card-bg);cursor:pointer;font-size:14px;color:var(--text-dim);line-height:30px;text-align:center;z-index:5;display:none}
 
@@ -376,16 +403,18 @@ const IMG_DATA = {};
 <script>
 const EP='anan001014';
 
-// 三学段配色：七年级蓝、八年级绿、九年级紫
+// 六元素配色：七上风、七下岩、八上雷、八下草、九上水、九下火
+// 六元素配色：七上风、七下岩、八上雷、八下草、九上水、九下火
 const gColors={
-  '七上':{idx:7,chCls:'ch-item-7',acc:'var(--c7)',tc:'tc-7',bgRole:'bg_qi_shang'},
-  '七下':{idx:7,chCls:'ch-item-7',acc:'var(--c7)',tc:'tc-7',bgRole:'bg_qi_xia'},
-  '八上':{idx:8,chCls:'ch-item-8',acc:'var(--c8)',tc:'tc-8',bgRole:'bg_ba_shang'},
-  '八下':{idx:8,chCls:'ch-item-8',acc:'var(--c8)',tc:'tc-8',bgRole:'bg_ba_xia'},
-  '九年级':{idx:9,chCls:'ch-item-9',acc:'var(--c9)',tc:'tc-9',bgRole:'bg_jiu'}
+  '七上':{idx:1,chCls:'ch-item-1',acc:'var(--c1)',tc:'tc-1',bgRole:'bg_qi_shang',elIcon:'images/el_wind.webp'},
+  '七下':{idx:2,chCls:'ch-item-2',acc:'var(--c2)',tc:'tc-2',bgRole:'bg_qi_xia',elIcon:'images/el_rock.webp'},
+  '八上':{idx:3,chCls:'ch-item-3',acc:'var(--c3)',tc:'tc-3',bgRole:'bg_ba_shang',elIcon:'images/el_lightning.webp'},
+  '八下':{idx:4,chCls:'ch-item-4',acc:'var(--c4)',tc:'tc-4',bgRole:'bg_ba_xia',elIcon:'images/el_grass.webp'},
+  '九上':{idx:5,chCls:'ch-item-5',acc:'var(--c5)',tc:'tc-5',bgRole:'bg_jiu_9a',elIcon:'images/el_water.webp'},
+  '九下':{idx:6,chCls:'ch-item-6',acc:'var(--c6)',tc:'tc-6',bgRole:'bg_jiu_9b',elIcon:'images/el_fire.webp'}
 };
+const regionMap={'七上':'蒙德','七下':'璃月','八上':'稻妻','八下':'须弥','九上':'枫丹','九下':'纳塔'};
 const elDots={'风':'#5b9bd5','岩':'#c9a96e','雷':'#9b7fd4','草':'#6daa6f','水':'#5babc4','火':'#e07b54','冰':'#7ec8e3'};
-
 // 每章分配的底部大图（每章一张）
 const CH_FOOTER_IMG = {
   // 七上
@@ -396,8 +425,10 @@ const CH_FOOTER_IMG = {
   '8a-1':'char_1','8a-2':'char_2','8a-3':'scene_1','8a-4':'extra_1','8a-5':'extra_7','8a-6':'scene_2',
   // 八下
   '8b-1':'scene_3','8b-2':'char_3','8b-3':'extra_3','8b-4':'extra_4','8b-5':'extra_5',
-  // 九年级
-  '9-1':'char_1','9-2':'char_2','9-3':'scene_1','9-4':'extra_1','9-5':'extra_2','9-6':'char_3','9-7':'scene_3','9-8':'extra_3','9-9':'extra_7'
+  // 九上（枫丹·水）
+  '9a-1':'char_1','9a-2':'char_2','9a-3':'scene_1','9a-4':'extra_1','9a-5':'extra_2',
+  // 九下（纳塔·火）
+  '9b-6':'char_3','9b-7':'scene_3','9b-8':'extra_3','9b-9':'extra_7'
 };
 
 const textbook={
@@ -428,16 +459,17 @@ const textbook={
     {id:'8b-3',num:9,name:'因式分解',el:'草',keywords:['提公因式','平方差','完全平方','十字相乘','分组分解']},
     {id:'8b-4',num:10,name:'分式',el:'草',keywords:['分式运算','分式方程','增根','验根','应用题']},
     {id:'8b-5',num:11,name:'二次根式',el:'草',keywords:['√a意义','最简二次根式','乘除','加减','分母有理化']}]},
-  '九年级':{chapters:[
-    {id:'9-1',num:1,name:'反比例函数',el:'水',keywords:['y=k/x','双曲线','k几何意义','矩形面积','实际应用']},
-    {id:'9-2',num:2,name:'一元二次方程',el:'水',keywords:['配方法','公式法','Δ判别式','韦达定理','根与系数','增长率']},
-    {id:'9-3',num:3,name:'圆',el:'水',keywords:['圆心角','圆周角','切线','切线长','弦切角','弧长','扇形']},
-    {id:'9-4',num:4,name:'数据的集中趋势和离散程度',el:'水',keywords:['平均数','中位数','众数','极差','方差','标准差']},
-    {id:'9-5',num:5,name:'等可能条件下的概率',el:'水',keywords:['树状图','列表法','放回','不放回','概率乘法']},
-    {id:'9-6',num:6,name:'二次函数',el:'火',keywords:['y=ax²+bx+c','顶点','对称轴','最值','平移','交点式']},
-    {id:'9-7',num:7,name:'图形的相似',el:'火',keywords:['相似三角形','比例线段','位似','黄金分割']},
-    {id:'9-8',num:8,name:'锐角三角函数',el:'冰',keywords:['sin','cos','tan','特殊角','解直角三角形']},
-    {id:'9-9',num:9,name:'投影与视图',el:'冰',keywords:['平行投影','中心投影','三视图','展开图']}]}};
+  '九上':{chapters:[
+    {id:'9a-1',num:1,name:'反比例函数',el:'水',keywords:['y=k/x','双曲线','k几何意义','矩形面积','实际应用']},
+    {id:'9a-2',num:2,name:'一元二次方程',el:'水',keywords:['配方法','公式法','Δ判别式','韦达定理','根与系数','增长率']},
+    {id:'9a-3',num:3,name:'圆',el:'水',keywords:['圆心角','圆周角','切线','切线长','弦切角','弧长','扇形']},
+    {id:'9a-4',num:4,name:'数据的集中趋势和离散程度',el:'水',keywords:['平均数','中位数','众数','极差','方差','标准差']},
+    {id:'9a-5',num:5,name:'等可能条件下的概率',el:'水',keywords:['树状图','列表法','放回','不放回','概率乘法']}]},
+  '九下':{chapters:[
+    {id:'9b-6',num:6,name:'二次函数',el:'火',keywords:['y=ax²+bx+c','顶点','对称轴','最值','平移','交点式']},
+    {id:'9b-7',num:7,name:'图形的相似',el:'火',keywords:['相似三角形','比例线段','位似','黄金分割']},
+    {id:'9b-8',num:8,name:'锐角三角函数',el:'冰',keywords:['sin','cos','tan','特殊角','解直角三角形']},
+    {id:'9b-9',num:9,name:'投影与视图',el:'冰',keywords:['平行投影','中心投影','三视图','展开图']}]}};
 
 let totalChapters=32;
 
@@ -483,7 +515,7 @@ function toggleEditMode(){
 }
 function checkPwd(){if(document.getElementById('pwdInput').value===EP){isEditMode=true;document.getElementById('pwdOverlay').classList.add('hidden');document.getElementById('modeBadge').className='mode-tag edit';document.getElementById('modeBadge').textContent='编辑中';document.getElementById('btnEditToggle').textContent='退出编辑';document.getElementById('btnSave').style.display='';if(currentChapter)renderContent(currentChapter);showToast('编辑模式已开启')}else{showToast('密码错误')}}
 
-function getGrade(id){if(id.startsWith('7a'))return'七上';if(id.startsWith('7b'))return'七下';if(id.startsWith('8a'))return'八上';if(id.startsWith('8b'))return'八下';return'九年级'}
+function getGrade(id){if(id.startsWith('7a'))return'七上';if(id.startsWith('7b'))return'七下';if(id.startsWith('8a'))return'八上';if(id.startsWith('8b'))return'八下';if(id.startsWith('9a'))return'九上';if(id.startsWith('9b'))return'九下';return'九上'}
 
 // 设置背景图
 function setGradeBg(grade){
@@ -518,7 +550,9 @@ function renderNav(){
   const nav=document.getElementById('chapterNav');nav.innerHTML='';
   for(const[grade,data]of Object.entries(textbook)){
     const gc=gColors[grade],g=document.createElement('div');g.className='grade-group';
-    const t=document.createElement('div');t.className='grade-title g-'+gc.idx;t.innerHTML=grade+' <span class="gd-arrow open">▶</span>';
+    const t=document.createElement('div');t.className='grade-title g-'+gc.idx;
+    const rgn=regionMap[grade]||'';
+    t.innerHTML='<img src="'+gc.elIcon+'" class="el-icon" alt=""> '+grade+' <span class="region-tag" style="background:'+gc.acc+';color:#fff">'+rgn+'</span> <span class="gd-arrow open">▶</span>';
     t.onclick=()=>{const c=g.querySelector('.grade-chapters');c.classList.toggle('collapsed');t.querySelector('.gd-arrow').classList.toggle('open')};
     const cd=document.createElement('div');cd.className='grade-chapters';
     data.chapters.forEach(ch=>{
@@ -549,8 +583,11 @@ function renderContent(ch){
 
   let html = '';
 
-  // 章节信息栏
-  html += '<div class="chapter-meta"><div class="meta-item">教材：<b>苏科版 · '+grade+'</b></div><div class="meta-item">第 '+ch.num+' 章 · '+ch.name+'</div></div>';
+  // 章节信息栏（含元素徽章）
+  const elName=ch.el||'';
+  html += '<div class="chapter-meta">';
+  if(elName)html+='<span class="el-badge" style="background:'+gc.acc+'15;color:'+gc.acc+';border:1px solid '+gc.acc+'33"><img src="'+gColors[grade].elIcon+'" class="el-icon-sm" alt="">'+elName+'</span>';
+  html += '<div class="meta-item">教材：<b style="color:'+gc.acc+'">苏科版 · '+grade+'</b></div><div class="meta-item">第 '+ch.num+' 章 · '+ch.name+'</div></div>';
 
   // 各内容卡片
   secs.forEach(s=>{
@@ -823,7 +860,11 @@ function fetchImageData(){
   'extra_5': 'images/extra_5.jpg',
   'extra_6': 'images/extra_6.jpg',
   'extra_7': 'images/extra_7.jpg',
-  'bg_ba_shang': 'images/bg_ba_shang.jpg'
+  'bg_ba_shang': 'images/bg_ba_shang.jpg',
+  // 九上（枫丹·水）
+  'bg_jiu_9a': 'images/bg_jiu.jpg',
+  // 九下（纳塔·火）
+  'bg_jiu_9b': 'images/bg_jiu.jpg'
   };
   Object.assign(IMG_DATA, raw);
   setHeader();
