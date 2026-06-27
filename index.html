@@ -83,7 +83,7 @@ body{
 .header-banner .author-mark em{font-style:normal;color:var(--gold);font-weight:700}
 
 /* ====== SIDEBAR ====== */
-.sidebar{width:var(--side-w);background:linear-gradient(180deg,rgba(255,253,248,0.96),rgba(252,247,235,0.94));border-right:1px solid var(--gold-border);display:flex;flex-direction:column;flex-shrink:0;position:relative;z-index:10;box-shadow:3px 0 24px rgba(100,80,40,.06);backdrop-filter:blur(10px)}
+.sidebar{width:var(--side-w);background:linear-gradient(180deg,rgba(255,253,248,0.96),rgba(252,247,235,0.94));border-right:1px solid var(--gold-border);display:flex;flex-direction:column;flex-shrink:0;position:relative;z-index:10;box-shadow:3px 0 24px rgba(100,80,40,.06);backdrop-filter:blur(10px);overflow-y:auto;overflow-x:hidden}
 .sidebar-header{padding:16px 14px 12px;border-bottom:1px solid var(--gold-border);position:relative;text-align:center}
 .sidebar-title-img{max-width:180px;width:75%;height:auto;margin:0 auto 6px;display:block;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.15))}
 .sidebar-header::after{content:'';position:absolute;bottom:0;left:16px;right:16px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-light),transparent)}
@@ -283,7 +283,7 @@ input[type="text"],input[type="password"],input[type="number"],textarea{cursor:u
 .editor-toolbar .color-swatch:hover{transform:scale(1.15);box-shadow:0 2px 6px rgba(0,0,0,.2)}
 /* ====== MOBILE ====== */
 @media(max-width:768px){
-  .sidebar{position:fixed;left:-100%;top:0;height:100vh;z-index:100;transition:left .3s;box-shadow:4px 0 24px rgba(0,0,0,.12)}
+  .sidebar{position:fixed;left:-100%;top:0;height:100vh;z-index:100;transition:left .3s;box-shadow:4px 0 24px rgba(0,0,0,.12);width:78vw}
   .sidebar.open{left:0}
   .sidebar-close-btn{display:block}
   .menu-btn{display:flex}
@@ -296,6 +296,14 @@ input[type="text"],input[type="password"],input[type="number"],textarea{cursor:u
   .toolbar{padding:10px 14px}
   .toolbar h3{font-size:13.5px}
   .chapter-meta{padding:11px 14px;font-size:11.5px}
+  /* 日记手机端优化 */
+  .diary-content-header{gap:8px;margin-bottom:10px}
+  .diary-content-header h3{font-size:14px}
+  .diary-editor-toolbar button{padding:5px 9px;font-size:11.5px}
+  .diary-editor-area{min-height:220px;padding:14px;font-size:15px;line-height:1.9}
+  .diary-action-bar{gap:6px;margin-top:10px}
+  .diary-action-bar button{padding:6px 14px;font-size:11.5px}
+  .sidebar-title-img{max-width:140px}
 }
 @media(max-width:480px){
   .header-banner{min-height:260px;padding:0 12px 14px}
@@ -377,6 +385,11 @@ input[type="text"],input[type="password"],input[type="number"],textarea{cursor:u
   .home-title-img{max-width:260px}
   .home-content .sub{font-size:12px;margin-bottom:20px}
   .home-content .enter-btn{padding:10px 28px;font-size:13px;letter-spacing:3px}
+  /* 日记小屏优化 */
+  .diary-editor-toolbar{gap:2px;padding:6px 8px}
+  .diary-editor-toolbar button{padding:4px 7px;font-size:11px}
+  .diary-editor-area{min-height:180px;padding:12px;font-size:14px;line-height:1.8}
+  .diary-action-bar button{padding:5px 10px;font-size:11px}
 }
 </style>
 </head>
@@ -402,10 +415,9 @@ input[type="text"],input[type="password"],input[type="number"],textarea{cursor:u
 
 <!-- 页眉横幅 -->
 <div class="header-banner" id="headerBanner" style="display:none">
-  <div class="header-inner">
-    <img src="images/title_logo.png" alt="初中数学" id="headerTitleImg" class="header-title-img">
-    <div class="author-mark">— crafted by <em>kax</em> —</div>
-  </div>
+    <div class="header-inner">
+      <div class="author-mark">— crafted by <em>kax</em> —</div>
+    </div>
 </div>
 
 <div class="overlay-mask" id="overlayMask" onclick="closeSidebar()"></div>
@@ -577,6 +589,27 @@ function updateStats(){
 function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('overlayMask').classList.add('show')}
 function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlayMask').classList.remove('show')}
 function selAndClose(ch,item){selectChapter(ch,item);if(window.innerWidth<=768)closeSidebar()}
+
+// 侧边栏触屏拖动
+(function(){
+  var sb,ox,oy,dx,dragging=false,touchStarted=false;
+  document.addEventListener('touchstart',function(e){
+    sb=document.getElementById('sidebar');
+    if(!sb||!sb.classList.contains('open'))return;
+    var t=e.touches[0];
+    ox=t.clientX;oy=t.clientY;
+    // 只在左边缘30px内开始拖动
+    if(ox>60)return;
+    touchStarted=true;dragging=false;
+  },{passive:true});
+  document.addEventListener('touchmove',function(e){
+    if(!touchStarted)return;
+    var t=e.touches[0];dx=t.clientX-ox;
+    if(Math.abs(dx)>8)dragging=true;
+    if(dragging&&dx<-20)closeSidebar();
+  },{passive:true});
+  document.addEventListener('touchend',function(){touchStarted=false;dragging=false});
+})();
 
 function toggleEditMode(){
   if(isEditMode){
@@ -1027,8 +1060,8 @@ function renderDiaryContent(entry){
   html+='<div class="diary-action-bar">';
   if(ed){
     html+='<button onclick="saveCurrentDiary()" style="background:linear-gradient(135deg,#f5e6c3,#e8d4a0);color:var(--gold-dark);border-color:var(--gold);font-weight:700">💾 保存日记</button>';
-    html+='<button class="btn-del" onclick="deleteDiaryEntry(\''+entry.id+'\')">🗑 删除此篇</button>';
   }
+  html+='<button class="btn-del" onclick="deleteDiaryEntry(\''+entry.id+'\')">🗑 删除此篇</button>';
   html+='<button onclick="goHome()" class="btn-gold" style="margin-left:auto">← 返回首页</button>';
   html+='</div>';
 
