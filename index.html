@@ -26,7 +26,7 @@
 body{
   font-family:"Noto Serif SC","Microsoft YaHei","微软雅黑",serif;
   color:var(--text-pri);min-height:100vh;overflow-x:hidden;
-  background:var(--ivory);position:relative;
+  background:transparent;position:relative;
 }
 
 /* ====== 背景图层 ====== */
@@ -54,29 +54,29 @@ body{
 
 .app{display:flex;min-height:100vh}
 
-/* ====== 页眉横幅 - v12 清晰完整展示 ====== */
+/* ====== 页眉横幅 - 完整展示角色 ====== */
 .header-banner{
   position:relative;width:100%;overflow:hidden;
-  flex-shrink:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:0 28px 16px;
+  flex-shrink:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:0 28px 18px;
   border-bottom:none;
-  min-height:240px;
+  min-height:380px;
 }
 .header-banner .header-full-img{
   position:absolute;top:0;left:0;width:100%;height:100%;
-  object-fit:cover;object-position:center 30%;
+  object-fit:cover;object-position:center top;
 }
-/* 渐变遮罩——轻一些让图更可见 */
+/* 渐变遮罩——极轻，让图片完整可见 */
 .header-banner::before{
   content:'';position:absolute;top:0;left:0;right:0;bottom:0;z-index:1;
   background:linear-gradient(180deg,
-    rgba(250,246,237,0.02) 0%,
-    rgba(250,246,237,0.10) 30%,
-    rgba(250,246,237,0.40) 65%,
-    rgba(250,246,237,0.80) 85%,
-    rgba(250,246,237,0.95) 100%
+    rgba(250,246,237,0.00) 0%,
+    rgba(250,246,237,0.08) 40%,
+    rgba(250,246,237,0.35) 70%,
+    rgba(250,246,237,0.70) 88%,
+    rgba(250,246,237,0.92) 100%
   );
 }
-.header-banner .header-inner{position:relative;z-index:2;text-align:center;width:100%;padding-top:160px}
+.header-banner .header-inner{position:relative;z-index:2;text-align:center;width:100%;padding-top:260px}
 .header-banner h1{font-family:'Ma Shan Zheng','ZCOOL XiaoWei','Noto Serif SC',serif;font-size:52px;color:var(--gold-dark);letter-spacing:8px;font-weight:900;text-shadow:0 0 20px rgba(201,162,39,0.3),0 2px 4px rgba(0,0,0,0.15),0 1px 0 rgba(255,255,255,0.5);line-height:1.3}
 .header-banner .sub{position:relative;z-index:2;font-size:12.5px;color:var(--text-sec);margin-top:6px;letter-spacing:2px}
 .header-banner .author-mark{position:relative;z-index:2;margin-top:8px;font-size:11px;color:var(--text-dim);letter-spacing:1px}
@@ -287,8 +287,8 @@ input[type="text"],input[type="password"],input[type="number"],textarea{cursor:u
   .sidebar-close-btn{display:block}
   .menu-btn{display:flex}
   .overlay-mask.show{display:block}
-  .header-banner{min-height:260px}
-  .header-banner .header-inner{padding-top:170px}
+  .header-banner{min-height:300px}
+  .header-banner .header-inner{padding-top:200px}
   .header-banner h1{font-size:36px;letter-spacing:4px}
   .content{padding:16px 14px}
   .editor-area{font-size:16px}
@@ -297,8 +297,8 @@ input[type="text"],input[type="password"],input[type="number"],textarea{cursor:u
   .chapter-meta{padding:11px 14px;font-size:11.5px}
 }
 @media(max-width:480px){
-  .header-banner{min-height:200px;padding:0 12px 14px}
-  .header-banner .header-inner{padding-top:130px}
+  .header-banner{min-height:260px;padding:0 12px 14px}
+  .header-banner .header-inner{padding-top:180px}
   .header-banner h1{font-size:28px;letter-spacing:3px}
   .section-card{border-radius:10px}
   .toolbar button{padding:5px 9px;font-size:10px}
