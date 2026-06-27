@@ -306,7 +306,7 @@ input[type="text"],input[type="password"],input[type="number"],textarea{cursor:u
 }
 
 /* ====== 首页标题图 ====== */
-.home-title-img{max-width:420px;width:85vw;height:auto;filter:drop-shadow(0 2px 20px rgba(0,0,0,0.4));margin-bottom:8px}
+.home-title-img{max-width:560px;width:80vw;height:auto;filter:drop-shadow(0 3px 24px rgba(0,0,0,0.5));margin-bottom:12px}
 .header-title-img{max-width:380px;width:75vw;height:auto;filter:drop-shadow(0 2px 12px rgba(0,0,0,0.15))}
 
 /* ====== 日记模块 ====== */
@@ -357,22 +357,23 @@ input[type="text"],input[type="password"],input[type="number"],textarea{cursor:u
 .home-bg{position:absolute;inset:0}
 .home-bg img{width:100%;height:100%;object-fit:cover;object-position:center 30%}
 .home-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.30) 0%,rgba(0,0,0,0.15) 40%,rgba(0,0,0,0.50) 100%)}
-.home-content{position:relative;z-index:1;text-align:center;color:#fff;padding:0 24px;margin-top:auto;padding-bottom:10vh}
+.home-content{position:relative;z-index:1;text-align:center;color:#fff;padding:0 24px;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;margin-top:0;padding-bottom:0}
+.home-content .title-zone{display:flex;flex-direction:column;align-items:center;margin-bottom:16vh}
 .home-content h1{font-family:'Ma Shan Zheng','ZCOOL XiaoWei','Noto Serif SC',serif;font-size:64px;letter-spacing:10px;font-weight:900;text-shadow:0 2px 20px rgba(0,0,0,0.5);margin-bottom:12px}
 .home-content .sub{font-size:16px;letter-spacing:4px;opacity:0.85;margin-bottom:40px}
 .home-content .enter-btn{display:inline-block;padding:14px 52px;font-size:18px;letter-spacing:6px;font-weight:700;color:#fff;background:rgba(201,162,39,0.55);border:2px solid rgba(255,255,255,0.7);border-radius:12px;cursor:url('images/cursor_pointer.cur'),pointer;transition:.35s;font-family:inherit;text-shadow:0 1px 4px rgba(0,0,0,0.3);backdrop-filter:blur(4px)}
 .home-content .enter-btn:hover{background:rgba(201,162,39,0.85);border-color:#fff;transform:translateY(-2px);box-shadow:0 6px 24px rgba(201,162,39,0.4)}
 @media(max-width:768px){
   .home-bg img{object-position:center 20%}
-  .home-content{margin-top:0;padding-bottom:8vh;padding-top:8vh;justify-content:center}
-  .home-content h1{font-size:38px;letter-spacing:5px}
+  .home-content .title-zone{margin-bottom:12vh}
+  .home-title-img{max-width:340px}
   .home-content .sub{font-size:13px;margin-bottom:28px}
   .home-content .enter-btn{padding:12px 36px;font-size:15px}
 }
 @media(max-width:480px){
   .home-bg img{object-position:center 15%}
-  .home-content{padding-bottom:6vh;padding-top:5vh}
-  .home-content h1{font-size:28px;letter-spacing:3px}
+  .home-content .title-zone{margin-bottom:10vh}
+  .home-title-img{max-width:260px}
   .home-content .sub{font-size:12px;margin-bottom:20px}
   .home-content .enter-btn{padding:10px 28px;font-size:13px;letter-spacing:3px}
 }
@@ -383,9 +384,11 @@ input[type="text"],input[type="password"],input[type="number"],textarea{cursor:u
 <div class="home-page" id="homePage">
   <div class="home-bg"><img id="homeBgImg" src="images/home_bg.jpg" alt=""></div>
   <div class="home-content">
-    <img src="images/title_logo.png" alt="初中数学" class="home-title-img">
-    <div class="sub">— crafted by kax —</div>
-    <button class="enter-btn" onclick="enterSite()">数学，启动！</button>
+    <div class="title-zone">
+      <img src="images/title_logo.png" alt="初中数学" class="home-title-img">
+      <div class="sub">— crafted by kax —</div>
+      <button class="enter-btn" onclick="enterSite()">数学，启动！</button>
+    </div>
   </div>
 </div>
 
@@ -1085,7 +1088,7 @@ function saveCurrentDiary(){
 function updateDiaryField(id,field,val){
   const entry=getDiaryById(id);
   if(entry){entry[field]=val;saveDiaryData();renderDiaryList()}
-}}
+}
 
 // ====== 加载图片数据并初始化 ======
 loadGithubToken();
