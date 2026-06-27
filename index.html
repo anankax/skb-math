@@ -929,6 +929,7 @@ function setGithubToken(){
 function loadGithubToken(){githubToken=localStorage.getItem('skb_github_token')||''}
 function saveToCloud(silent){
   if(!githubToken){if(!silent)setGithubToken();if(!githubToken)return}
+  // 备课数据
   const data=JSON.stringify(chapterData,null,2);
   const content=btoa(unescape(encodeURIComponent(data)));
   const sha=window._cloudSha||'';
@@ -938,12 +939,22 @@ function saveToCloud(silent){
     .then(r=>{if(!r.ok)return r.json().then(e=>{throw new Error(e.message||'保存失败')});return r.json()})
     .then(j=>{window._cloudSha=j.sha;if(!silent)showToast('✅ 已推送到云端')})
     .catch(e=>{if(!silent)showToast('❌ 推送失败: '+e.message)});
+  // 日记数据
+  const diaryContent=btoa(unescape(encodeURIComponent(JSON.stringify(diaryData,null,2))));
+  const diarySha=window._diaryCloudSha||'';
+  const diaryBody={message:'auto: 备份日记数据 '+new Date().toISOString().slice(0,10),content:diaryContent};
+  if(diarySha)diaryBody.sha=diarySha;
+  fetch('https://api.github.com/repos/anankax/skb-math/contents/diary.json',{method:'PUT',headers:{Authorization:'token '+githubToken,'Accept':'application/vnd.github.v3+json'},body:JSON.stringify(diaryBody)})
+    .then(r=>{if(!r.ok)return r.json().then(e=>{throw new Error(e.message||'日记保存失败')});return r.json()})
+    .then(j=>{window._diaryCloudSha=j.sha;console.log('[sync] 日记已推送')})
+    .catch(e=>{console.log('[sync] 日记推送失败:',e.message)});
 }
 function loadFromCloud(silent){
   if(!silent) showToast('⏳ 正在拉取...');
   const headers = githubToken
     ? {'Authorization':'token '+githubToken,'Accept':'application/vnd.github.v3+json'}
     : {'Accept':'application/vnd.github.v3+json'};
+  // 拉取备课数据
   fetch('https://api.github.com/repos/anankax/skb-math/contents/data.json', {headers})
     .then(r=>{
       if(r.status===404){if(!silent) showToast('云端暂无数据');return null}
@@ -962,6 +973,22 @@ function loadFromCloud(silent){
       else console.log('[sync] 云端数据已同步');
     })
     .catch(e=>{if(!silent) showToast('❌ 拉取失败: '+e.message)});
+  // 拉取日记数据
+  fetch('https://api.github.com/repos/anankax/skb-math/contents/diary.json', {headers})
+    .then(r=>{
+      if(r.status===404) return null;
+      if(!r.ok) throw new Error('日记拉取失败');
+      return r.json()
+    })
+    .then(j=>{
+      if(!j) return;
+      window._diaryCloudSha = j.sha;
+      diaryData = JSON.parse(decodeURIComponent(escape(atob(j.content))));
+      localStorage.setItem('skb7_diary', JSON.stringify(diaryData));
+      renderDiaryList();
+      console.log('[sync] 日记已同步');
+    })
+    .catch(e=>{console.log('[sync] 日记拉取失败:',e.message)});
 }
 
 // ====== 日记模块 ======
